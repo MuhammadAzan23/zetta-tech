@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: light; }
+html { scroll-behavior: smooth; }
+body { @apply bg-paper font-sans text-ink antialiased; }
+
+/* Headings: sentence case, tight, calm. */
+.h-display { @apply font-display font-semibold leading-[1.02] tracking-[-0.025em]; }
+.bg-grid { background: none; }
+.label { @apply font-mono text-[0.72rem] uppercase tracking-[0.14em]; }
+
+:focus-visible { outline: 2px solid #0A8DBD; outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation: none !important; transition: none !important; }
+}
