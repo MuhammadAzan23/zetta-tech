@@ -10,13 +10,20 @@ npm run dev                  # http://localhost:3000
 npm run build && npm start
 ```
 
-## Before launch (placeholders to replace)
+## Catalog import
+
+The authorized Microtech catalog is stored locally in `lib/catalog.json` with product media in `public/catalog/images/`.
+
+To refresh it from the source WordPress site:
+```bash
+npm run import:microtech
+```
+
+Catalog routes are available at `/catalog`, `/catalog/[product]`, `/catalog/category/[category]` and `/brands`.
+
+## Before launch
 - `.env.local`: site URL, WhatsApp number (digits only, with country code), phone, email
-- `public/fonts/Satoshi-Variable.woff2`: download Satoshi from fontshare.com and add this file (falls back to Inter until then)
-- `lib/data.ts`: `projects` (dummy), `stats` (items with `placeholder: true`), category items, brand details, city copy
-- Add real product cards, images and specs to category pages (see TODO comments)
-- Use official brand logos only with permission; the ticker currently uses text names
-- Unique copy for each city page (avoid duplicate content)
+- Use official brand logos only with permission; the brand ticker uses text names
 - Add `app/icon.png` / favicon and an Open Graph image from the original logo files
 
 ## Structure

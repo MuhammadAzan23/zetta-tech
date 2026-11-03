@@ -1,3 +1,5 @@
+import JourneyLine from "./JourneyLine";
+
 const steps = [
   ["Site survey", "We visit, measure, check cable routes and note what each area needs."],
   ["Plan and quote", "You get a clear equipment list, layout and price before anything is ordered."],
@@ -7,11 +9,12 @@ const steps = [
 
 export default function Process() {
   return (
-    <section id="how-we-work" className="border-y border-navy-900/15 bg-white">
+    <section id="how-we-work" className="relative overflow-hidden border-y border-navy-900/15 bg-white">
+      <JourneyLine />
       <div className="mx-auto max-w-7xl px-5 py-20 sm:px-6">
         <p className="label text-cyan-deep">How we work</p>
         <h2 className="h-display mt-3 max-w-2xl text-4xl text-navy-900 sm:text-5xl">From first visit to handover, one team</h2>
-        <ol className="mt-12 grid gap-8 md:grid-cols-4 md:gap-0">
+        <ol className="relative mt-12 grid gap-8 md:grid-cols-4 md:gap-0">
           {steps.map(([t, d], i) => (
             <li key={t} className="relative md:pr-8">
               <div className="flex items-center gap-3">

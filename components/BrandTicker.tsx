@@ -4,11 +4,11 @@ import Image from "next/image";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { brands } from "@/lib/data";
+import type { CatalogBrand } from "@/lib/catalog";
 
 // One continuous sentence that slides sideways as the page scrolls (no pinning, no scroll-jacking).
 // Brand names are real links; the logo mark is the punctuation.
-export default function BrandTicker() {
+export default function BrandTicker({ brands }: { brands: Pick<CatalogBrand, "slug" | "name">[] }) {
   const section = useRef<HTMLElement>(null);
   const track = useRef<HTMLDivElement>(null);
 

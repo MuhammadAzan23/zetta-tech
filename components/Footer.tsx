@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { site, waLink } from "@/lib/site";
-import { brands, categories, cities } from "@/lib/data";
+import { categories } from "@/lib/data";
+import { catalogBrands } from "@/lib/catalog";
 import Logo from "./Logo";
 
 export default function Footer() {
@@ -21,8 +22,8 @@ export default function Footer() {
           </p>
         </div>
         <FooterList title="Products" items={categories.map((c) => ({ href: `/products/${c.slug}`, label: c.name }))} />
-        <FooterList title="Brands" items={brands.map((b) => ({ href: `/brands/${b.slug}`, label: b.name }))} />
-        <FooterList title="Cities" items={cities.map((c) => ({ href: `/locations/${c.slug}`, label: c.name }))} />
+        <FooterList title="Brands" items={catalogBrands.map((b) => ({ href: `/brands/${b.slug}`, label: b.name }))} />
+        <FooterList title="Location" items={[{ href: "/locations/karachi", label: "Karachi office" }]} />
       </div>
       <div className="label border-t border-white/10 px-5 py-5 text-center text-white/50">
         © {new Date().getFullYear()} {site.name} · Brand names belong to their respective owners

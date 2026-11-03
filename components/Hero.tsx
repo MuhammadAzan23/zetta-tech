@@ -6,12 +6,12 @@ export default function Hero() {
     <section className="border-b border-navy-900/15">
       <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 py-14 sm:px-6 lg:grid-cols-[1.05fr_1fr] lg:py-20">
         <div>
-          <p className="label text-cyan-deep">Security and networking · Karachi, Hyderabad, Sukkur, Islamabad</p>
+          <p className="label text-cyan-deep">Security and networking · Karachi</p>
           <h1 className="h-display mt-5 text-[clamp(2.4rem,5.6vw,4.6rem)] text-navy-900">
             CCTV, access control and networking for Pakistani businesses.
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-navy-900/80">
-            We are an official dealer of eight brands. Our team supplies, installs and configures the cameras, door readers, attendance terminals, routers, switches and racks your offices and factories depend on.
+            Our team supplies, installs and configures the cameras, door readers, attendance terminals, routers, switches and racks your Karachi offices and factories depend on.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <a href={waLink()} className="rounded bg-navy-900 px-6 py-3.5 font-semibold text-white transition-colors hover:bg-navy-800">Get a quote on WhatsApp</a>

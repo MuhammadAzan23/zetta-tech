@@ -1,23 +1,22 @@
 import Link from "next/link";
-import { cities, faqs, projects } from "@/lib/data";
+import { categories, cities, faqs } from "@/lib/data";
 import { site, waLink } from "@/lib/site";
 
 export function Projects() {
-  const dev = process.env.NODE_ENV !== "production";
+  const solutions = categories.slice(0, 4);
   return (
     <section className="mx-auto max-w-7xl px-5 py-20 sm:px-6">
       <div className="grid gap-8 lg:grid-cols-[1fr_2.2fr]">
         <div>
-          <p className="label text-cyan-deep">Recent work</p>
-          <h2 className="h-display mt-3 text-4xl text-navy-900 sm:text-5xl">Recent installations</h2>
+          <p className="label text-cyan-deep">Karachi solutions</p>
+          <h2 className="h-display mt-3 text-4xl text-navy-900 sm:text-5xl">Systems we plan and install</h2>
         </div>
-        {/* PLACEHOLDER content: replace with real projects in lib/data.ts */}
         <ul className="border-t border-navy-900/25">
-          {projects.map((p) => (
-            <li key={p.title + p.city} className="grid gap-1 border-b border-navy-900/15 py-5 sm:grid-cols-[1fr_1.4fr_auto] sm:items-baseline sm:gap-6">
-              <span className="font-display text-xl font-semibold text-navy-900">{p.title}{dev && p.placeholder ? <em className="label ml-2 not-italic text-cyan-deep">sample</em> : null}</span>
-              <span className="text-navy-900/70">{p.scope}</span>
-              <span className="label text-navy-900/55">{p.city}</span>
+          {solutions.map((solution) => (
+            <li key={solution.slug} className="grid gap-1 border-b border-navy-900/15 py-5 sm:grid-cols-[1fr_1.4fr_auto] sm:items-baseline sm:gap-6">
+              <Link href={`/products/${solution.slug}`} className="font-display text-xl font-semibold text-navy-900 underline decoration-transparent decoration-2 underline-offset-4 hover:decoration-cyan-brand">{solution.name}</Link>
+              <span className="text-navy-900/70">{solution.short}</span>
+              <span className="label text-navy-900/55">Karachi</span>
             </li>
           ))}
         </ul>
@@ -37,7 +36,7 @@ export function Cities() {
               <Link href={`/locations/${c.slug}`} className="font-display text-3xl font-semibold text-navy-900 underline decoration-cyan-brand decoration-2 underline-offset-8 hover:text-navy-700 sm:text-5xl">{c.name}</Link>
             </li>
           ))}
-          <li className="self-end text-navy-900/60">and other cities on request</li>
+          <li className="self-end text-navy-900/60">Supply, installation and support across Karachi</li>
         </ul>
       </div>
     </section>

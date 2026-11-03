@@ -14,7 +14,7 @@ export function generateMetadata({ params }: Props): Metadata {
   const c = categories.find((x) => x.slug === params.category);
   if (!c) return {};
   return {
-    title: `${c.name} in Karachi, Hyderabad, Sukkur & Islamabad`,
+    title: `${c.name} in Karachi`,
     description: c.description,
     alternates: { canonical: `/products/${c.slug}` },
   };
@@ -33,8 +33,10 @@ export default function CategoryPage({ params }: Props) {
           <ul className="mt-5 grid gap-3">
             {c.items.map((i) => (<li key={i} className="border border-navy-900/15 bg-white px-4 py-3 font-medium text-navy-900">{i}</li>))}
           </ul>
-          {/* TODO: add real product cards with specs and images for each item */}
-          <a href={waLink(`Hello Zetta Tech, I need a quote for ${c.name}.`)} className="mt-6 inline-block rounded bg-navy-900 px-6 py-3.5 font-semibold text-white hover:bg-navy-800">Request a quote for {c.name}</a>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a href={waLink(`Hello Zetta Tech, I need a quote for ${c.name}.`)} className="inline-block rounded bg-navy-900 px-6 py-3.5 font-semibold text-white hover:bg-navy-800">Request a quote for {c.name}</a>
+            <Link href="/catalog" className="inline-block rounded border border-navy-900 px-6 py-3.5 font-semibold text-navy-900 hover:bg-white">Browse full catalog</Link>
+          </div>
         </div>
         <div>
           <h2 className="font-display text-2xl font-semibold text-navy-900">Brands</h2>

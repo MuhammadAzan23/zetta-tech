@@ -24,9 +24,8 @@ export default function CityPage({ params }: Props) {
   if (!c) notFound();
   return (
     <>
-      <PageHero title={`Security and networking in ${c.name}`} intro={`${c.note} Official dealer of ZKTeco, UniFi, Ruijie, MikroTik, Dahua, Tiandy, D-Link and Cloud.`} crumbs={[{ href: "/", label: "Home" }, { href: `/locations/${c.slug}`, label: c.name }]} />
+      <PageHero title={`Security and networking in ${c.name}`} intro={`${c.note} Supply, installation and support for offices, factories, warehouses and commercial sites.`} crumbs={[{ href: "/", label: "Home" }, { href: `/locations/${c.slug}`, label: c.name }]} />
       <section className="mx-auto max-w-7xl px-5 py-16 sm:px-6">
-        {/* TODO: write unique copy for each city (local sites, industries, case studies). Avoid copying text between cities. */}
         <h2 className="font-display text-2xl font-semibold text-navy-900">What we install in {c.name}</h2>
         <ul className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {categories.map((x) => (

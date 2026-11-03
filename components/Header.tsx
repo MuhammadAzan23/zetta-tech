@@ -5,8 +5,8 @@ import { site, waLink } from "@/lib/site";
 import Logo from "./Logo";
 
 const links = [
-  { href: "/products/cctv-nvrs", label: "Products" },
-  { href: "/brands/zkteco", label: "Brands" },
+  { href: "/catalog", label: "Products" },
+  { href: "/brands", label: "Brands" },
   { href: "/#how-we-work", label: "How we work" },
   { href: "/locations/karachi", label: "Locations" },
   { href: "/about", label: "About" },

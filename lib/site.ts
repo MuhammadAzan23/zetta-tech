@@ -1,4 +1,4 @@
-// Central site config. TODO: replace placeholder contact details via .env.local
+// Central site config. Set the contact values in .env.local before launch.
 export const site = {
   name: "Zetta Tech",
   tagline: "Complete Security & Networking Solutions",
@@ -14,7 +14,7 @@ export const site = {
     full: "V26H+75V, Saddar, Karachi, Pakistan",
   },
   description:
-    "Zetta Tech supplies, installs and configures access control, attendance management, CCTV and NVRs, routers, switches, gateways and IT racks for businesses, offices and factories in Karachi, Hyderabad, Sukkur and Islamabad.",
+    "Zetta Tech supplies, installs and configures access control, attendance management, CCTV and NVRs, routers, switches, gateways and IT racks for businesses, offices and factories in Karachi.",
 };
 
 export function waLink(message = "Hello Zetta Tech, I would like a quote.") {

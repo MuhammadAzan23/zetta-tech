@@ -1,5 +1,4 @@
-// All catalog content lives here. Update this file to update the site.
-// Anything marked PLACEHOLDER must be replaced with real data before launch.
+// Core service content for the Karachi-focused marketing pages.
 
 export type Brand = { slug: string; name: string; blurb: string };
 export const brands: Brand[] = [
@@ -77,39 +76,27 @@ export const categories: Category[] = [
 
 export const cities = [
   { slug: "karachi", name: "Karachi", note: "Head office in Saddar." },
-  { slug: "hyderabad", name: "Hyderabad", note: "Installation and support across Hyderabad." },
-  { slug: "sukkur", name: "Sukkur", note: "Installation and support across Sukkur." },
-  { slug: "islamabad", name: "Islamabad", note: "Installation and support across Islamabad." },
 ];
 
-// PLACEHOLDER: replace with real installations.
-export const projects = [
-  { title: "Corporate office", city: "Karachi", scope: "CCTV and access control", placeholder: true },
-  { title: "Manufacturing facility", city: "Hyderabad", scope: "Attendance terminals and network", placeholder: true },
-  { title: "Warehouse", city: "Sukkur", scope: "CCTV, NVR and structured cabling", placeholder: true },
-  { title: "Multi-floor office", city: "Islamabad", scope: "Wi-Fi, switching and IT rack", placeholder: true },
-];
-
-// Only facts that are already true. Add "Installations completed" and "Years in business"
-// here once you have real numbers.
+// Keep these figures tied to the imported catalog and current service area.
 export const stats = [
-  { value: 8, suffix: "", label: "Official brands" },
+  { value: 17, suffix: "", label: "Catalog brands" },
   { value: 6, suffix: "", label: "System types we install" },
-  { value: 4, suffix: "", label: "Cities served" },
+  { value: 1, suffix: "", label: "Karachi office" },
 ];
 
 export const faqs = [
   {
-    q: "Are you an official dealer of the brands you sell?",
-    a: "Yes. Zetta Tech is an official dealer for ZKTeco, UniFi, Ruijie, MikroTik, Dahua, Tiandy, D-Link and Cloud products.",
+    q: "Which products can I request a quote for?",
+    a: "You can request a quote for any product in our catalog, including security, networking, wireless, fiber, racks, power and communication equipment.",
   },
   {
     q: "Do you install the equipment as well as supply it?",
     a: "Yes. We supply, install and configure every system, including cabling, rack setup and user training.",
   },
   {
-    q: "Which cities do you serve?",
-    a: "We are based in Saddar, Karachi, and install across Hyderabad, Sukkur, Islamabad and other cities.",
+    q: "Where do you install?",
+    a: "We are based in Saddar, Karachi, and provide supply, installation and support for sites across Karachi.",
   },
   {
     q: "How do I get a quote?",
