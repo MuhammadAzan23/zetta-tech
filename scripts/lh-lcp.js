@@ -1,0 +1,12 @@
+const fs = require("fs");
+const { join } = require("path");
+const dir = join(__dirname, "..", ".ohmyagent", "motion-audit");
+const r = JSON.parse(fs.readFileSync(join(dir, "lh-home-mobile.json"), "utf8"));
+const a = r.audits;
+console.log("LCP el:", JSON.stringify(a["largest-contentful-paint-element"]?.details?.items?.[0]?.items?.[0]?.node ?? a["largest-contentful-paint-element"]?.details?.items?.[0], null, 1).slice(0, 900));
+console.log("\nLCP phases:", JSON.stringify(a["lcp-lazy-loaded"]?.score));
+console.log("\nlong tasks:", (a["long-tasks"]?.details?.items ?? []).map((i) => ({ url: (i.url || "").split("/").pop(), dur: Math.round(i.duration), start: Math.round(i.startTime) })));
+console.log("\nnetwork:", (a["network-requests"]?.details?.items ?? []).filter((i) => i.transferSize > 20000).map((i) => ({ url: i.url.split("/").pop().slice(0, 50), kb: Math.round(i.transferSize / 1024), type: i.resourceType })));
+console.log("\nunused js:", (a["unused-javascript"]?.details?.items ?? []).map((i) => ({ url: (i.url || "").split("/").pop(), wastedKB: Math.round((i.wastedBytes || 0) / 1024) })));
+console.log("\nfont:", JSON.stringify(a["font-display"]?.score), a["font-display"]?.displayValue);
+console.log("contrast items:", JSON.stringify(a["color-contrast"]?.details?.items?.slice(0, 6), null, 1).slice(0, 1800));
