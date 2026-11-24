@@ -1,31 +1,57 @@
 "use client";
+
 import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { stats } from "@/lib/data";
 
-// Final values are in the HTML (SEO, no-JS, screen readers); JS counts up when scrolled into view.
+// Final values are in the HTML (SEO, no-JS, screen readers); JS counts up once when
+// scrolled into view. No animation library: one short rAF loop per number.
 export default function Stats() {
   const root = useRef<HTMLDListElement>(null);
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+    const el = root.current;
+    if (!el) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const ctx = gsap.context(() => {
-      root.current?.querySelectorAll<HTMLElement>("[data-count]").forEach((el) => {
-        const end = Number(el.dataset.count);
-        const suffix = el.dataset.suffix ?? "";
-        const obj = { v: 0 };
-        el.textContent = `0${suffix}`;
-        gsap.to(obj, {
-          v: end, duration: 1.6, ease: "power2.out",
-          scrollTrigger: { trigger: el, start: "top 88%", once: true },
-          onUpdate: () => { el.textContent = `${Math.round(obj.v)}${suffix}`; },
-          onComplete: () => { el.textContent = `${end}${suffix}`; },
-        });
-      });
-    }, root);
-    return () => ctx.revert();
+
+    const nodes = Array.from(el.querySelectorAll<HTMLElement>("[data-count]"));
+    const frames = new Map<HTMLElement, number>();
+    const started = new Set<HTMLElement>();
+    const DURATION = 800;
+
+    const run = (node: HTMLElement) => {
+      const end = Number(node.dataset.count);
+      const suffix = node.dataset.suffix ?? "";
+      const start = performance.now();
+      const tick = (now: number) => {
+        const t = Math.min(1, (now - start) / DURATION);
+        // Ease out cubic, matching the site's power2/power3 feel.
+        const eased = 1 - Math.pow(1 - t, 3);
+        node.textContent = `${Math.round(end * eased)}${suffix}`;
+        if (t < 1) frames.set(node, requestAnimationFrame(tick));
+        else node.textContent = `${end}${suffix}`;
+      };
+      node.textContent = `0${suffix}`;
+      frames.set(node, requestAnimationFrame(tick));
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const node = entry.target as HTMLElement;
+          if (!entry.isIntersecting || started.has(node)) continue;
+          started.add(node);
+          run(node);
+          observer.unobserve(node);
+        }
+      },
+      { threshold: 0.4 }
+    );
+
+    nodes.forEach((node) => observer.observe(node));
+    return () => {
+      observer.disconnect();
+      frames.forEach((id) => cancelAnimationFrame(id));
+    };
   }, []);
 
   return (

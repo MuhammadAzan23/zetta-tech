@@ -1,14 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import "@fontsource-variable/bricolage-grotesque";
-import "@fontsource/ibm-plex-sans/400.css";
-import "@fontsource/ibm-plex-sans/500.css";
-import "@fontsource/ibm-plex-sans/600.css";
-import "@fontsource/ibm-plex-mono/400.css";
-import "@fontsource/ibm-plex-mono/500.css";
+import "./fonts.css";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppFab from "@/components/WhatsAppFab";
+import { EnquiryProvider } from "@/components/enquiry/EnquiryProvider";
+import EnquiryDrawer from "@/components/enquiry/EnquiryDrawer";
+import EnquiryBinder from "@/components/enquiry/EnquiryBinder";
+import RevealObserver from "@/components/motion/RevealObserver";
 import { site } from "@/lib/site";
 import { cities } from "@/lib/data";
 
@@ -52,13 +51,26 @@ const localBusiness = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body>
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Tiny, blocking-safe: enables animation-only hiding and lets no-JS visitors see everything. */}
+        <script dangerouslySetInnerHTML={{ __html: `document.documentElement.classList.add('js')` }} />
+        {/* The two faces above the fold are preloaded: the H1 face and the body face
+            used by the hero paragraph (the LCP element). Nothing else competes. */}
+        <link rel="preload" href="/fonts/bricolage-grotesque-latin.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/ibm-plex-sans-400.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+      </head>
+      <body className="font-sans">
         <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-[60] focus:rounded focus:bg-white focus:px-3 focus:py-2">Skip to content</a>
-        <Header />
-        <main id="main">{children}</main>
-        <Footer />
-        <WhatsAppFab />
+        <EnquiryProvider>
+          <Header />
+          <main id="main">{children}</main>
+          <Footer />
+          <WhatsAppFab />
+          <EnquiryDrawer />
+          <EnquiryBinder />
+          <RevealObserver />
+        </EnquiryProvider>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusiness) }} />
       </body>
     </html>

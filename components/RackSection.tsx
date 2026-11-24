@@ -1,5 +1,6 @@
 import RackDiagram from "./RackDiagram";
 import Stats from "./Stats";
+import Reveal from "./motion/Reveal";
 
 const points = [
   "Wall-mount or floor-standing rack sized for your equipment",
@@ -10,9 +11,9 @@ const points = [
 
 export default function RackSection() {
   return (
-    <section className="bg-navy-950 text-white">
+    <section className="defer-paint bg-navy-950 text-white">
       <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 py-20 sm:px-6 lg:grid-cols-2">
-        <div>
+        <Reveal stagger>
           <p className="label text-cyan-brand">Racks and cabling</p>
           <h2 className="h-display mt-3 text-4xl sm:text-5xl">The part nobody sees should still be tidy</h2>
           <ul className="mt-8 grid gap-4">
@@ -22,7 +23,7 @@ export default function RackSection() {
               </li>
             ))}
           </ul>
-        </div>
+        </Reveal>
         <RackDiagram className="mx-auto h-auto w-full max-w-lg" />
       </div>
       <div className="mx-auto max-w-7xl px-5 pb-16 sm:px-6"><Stats /></div>

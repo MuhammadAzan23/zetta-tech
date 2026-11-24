@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import PageHero from "@/components/PageHero";
+import CatalogGrid from "@/components/CatalogGrid";
 import CatalogCard from "@/components/CatalogCard";
-import { catalogCategories, getCatalogCategory, productsForCategory } from "@/lib/catalog";
+import { catalogBrands, catalogCardData, catalogGridItems, catalogCategories, getCatalogCategory, productsForCategory } from "@/lib/catalog";
 
 type Props = { params: { category: string } };
 export const dynamicParams = false;
@@ -22,9 +23,12 @@ export default function CatalogCategoryPage({ params }: Props) {
     <>
       <PageHero title={category.name} intro={`${products.length.toLocaleString()} products in this catalog category.`} crumbs={[{ href: "/", label: "Home" }, { href: "/catalog", label: "Catalog" }, { href: `/catalog/category/${category.slug}`, label: category.name }]} />
       <section className="mx-auto max-w-7xl px-5 py-14 sm:px-6">
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {products.map((product) => <CatalogCard key={product.id} product={product} />)}
-        </div>
+        <CatalogGrid
+          items={catalogGridItems(products)}
+          brands={catalogBrands.map((b) => b.name)}
+          initial={products.slice(0, 12).map((product) => <CatalogCard key={product.id} product={catalogCardData(product)} />)}
+          initialCount={12}
+        />
       </section>
     </>
   );

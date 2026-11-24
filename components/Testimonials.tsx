@@ -1,5 +1,3 @@
-"use client";
-
 type Testimonial = {
   quote: string;
   name: string;
@@ -44,12 +42,12 @@ function Row({ reverse = false }: { reverse?: boolean }) {
 
 export default function Testimonials() {
   return (
-    <section className="testimonial-section" aria-labelledby="testimonials-heading">
+    <section className="testimonial-section defer-paint" aria-labelledby="testimonials-heading">
       <div className="testimonial-heading">
         <p className="testimonial-eyebrow">The Zetta Tech experience</p>
         <h2 id="testimonials-heading">Clear planning. Tidy installation. Ongoing support.</h2>
       </div>
-      <div className="testimonial-rows">
+      <div className="testimonial-rows" data-reveal>
         <Row />
         <Row reverse />
       </div>

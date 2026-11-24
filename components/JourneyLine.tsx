@@ -2,6 +2,10 @@
 
 import { useEffect, useRef } from "react";
 
+/**
+ * Scroll-linked connecting line for "How we work".
+ * Same behaviour as before (calm, no scroll-jacking), now using rAF-throttled updates.
+ */
 export default function JourneyLine() {
   const section = useRef<SVGSVGElement>(null);
   const path = useRef<SVGPathElement>(null);
@@ -12,7 +16,9 @@ export default function JourneyLine() {
     if (!svg || !line) return;
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let frame = 0;
     const update = () => {
+      frame = 0;
       if (reduceMotion.matches) {
         line.style.strokeDashoffset = "0";
         return;
@@ -22,15 +28,19 @@ export default function JourneyLine() {
       const progress = Math.max(0, Math.min(1, (viewport - bounds.top) / (viewport + bounds.height)));
       line.style.strokeDashoffset = String(1 - progress);
     };
+    const schedule = () => {
+      if (!frame) frame = window.requestAnimationFrame(update);
+    };
 
     update();
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
-    reduceMotion.addEventListener("change", update);
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    reduceMotion.addEventListener("change", schedule);
     return () => {
-      window.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
-      reduceMotion.removeEventListener("change", update);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      reduceMotion.removeEventListener("change", schedule);
+      if (frame) window.cancelAnimationFrame(frame);
     };
   }, []);
 
