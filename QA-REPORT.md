@@ -48,12 +48,20 @@ Console errors: **0**. Failed network requests (4xx/5xx): **0**.
 | Console errors on every page | PASS | 0 captured across all audited routes |
 | 404s / failed requests | PASS | 0 across all audited routes |
 | Every internal link resolves | PASS | 30 unique internal links from the home page, all 200 |
+| Header search index matches the catalog | PASS | `prebuild` regenerates it; 680 items served, 0 bad slugs |
 
 **Fixed during this audit:** `npm run lint` previously dropped into the interactive
 ESLint first-run prompt (there was no config file), so it could never pass in CI.
 Added `.eslintrc.json` extending `next/core-web-vitals`, and installed
 `eslint@8.57.1` + `eslint-config-next@14.2.35` as dev dependencies. `npm run lint`
 is now non-interactive and green.
+
+The header search index (`public/search-index.json`, 207 KB, 680 products) was
+committed by hand and nothing regenerated it, so editing `lib/catalog.json` would
+have left header search quietly out of date with the catalog. Added a `prebuild`
+script running `scripts/generate-search-index.js`, so `npm run build` now refreshes
+it from the catalog every time. The index already matched the catalog exactly —
+regenerating produced no diff — so this closes a future risk, not a present bug.
 
 The 7 remaining warnings are advisory only:
 
@@ -449,6 +457,7 @@ is normal for a page of this shape.
 | Product page had no specs, related products or JSON-LD | `app/catalog/[slug]/page.tsx` | Full detail page, Product + BreadcrumbList schema, no price |
 | Detail "Add to enquiry" was not wired | `AddToEnquiry.tsx` | Button distinguishable by the binder, no double-add |
 | Catalog filters were not in the URL | `CatalogGrid.tsx` | Shareable, bookmarkable, survives reload |
+| Header search index could go stale | `package.json` | `prebuild` regenerates it from `lib/catalog.json` on every build |
 
 Two things were **deliberately not** done, because they were not defects:
 
