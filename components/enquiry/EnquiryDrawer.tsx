@@ -2,14 +2,14 @@
 
 import { useEffect, useRef } from "react";
 import { useEnquiry } from "./EnquiryProvider";
-import { waLink } from "@/lib/site";
+import { absoluteUrl, splitWhatsAppMessage, waLink } from "@/lib/site";
 
 /**
  * Right-hand enquiry drawer: backdrop fade, panel slides in, focus trapped,
  * Escape closes, focus returns to the trigger. Fine with reduced motion (no slide).
  */
 export default function EnquiryDrawer() {
-  const { items, open, setOpen, remove, clear, count } = useEnquiry();
+  const { items, open, setOpen, remove, setQuantity, clear, count } = useEnquiry();
   const panel = useRef<HTMLDivElement>(null);
   const closeButton = useRef<HTMLButtonElement>(null);
   const restoreFocus = useRef<Element | null>(null);
@@ -58,8 +58,16 @@ export default function EnquiryDrawer() {
     items.length === 0
       ? ""
       : `Hello Zetta Tech, I would like a quote for these products:\n\n${items
-          .map((item, index) => `${index + 1}. ${item.name} — ${item.brand} / ${item.category}`)
-          .join("\n")}\n\nPlease share pricing and availability.`;
+          .map(
+            (item, index) =>
+              `${index + 1}. ${item.name} — ${item.brand} / ${item.category}\nQuantity: ${item.quantity ?? 1}\nLink: ${absoluteUrl(item.href)}`,
+          )
+          .join("\n\n")}\n\nPlease share pricing and availability.`;
+
+  // The list can exceed one message once a few items carry links, so send it in
+  // numbered parts rather than letting WhatsApp truncate the tail.
+  const parts = splitWhatsAppMessage(message);
+  const sendLinks = parts.map((part) => waLink(part));
 
   return (
     <div className="fixed inset-0 z-[70]" role="presentation">
@@ -111,6 +119,40 @@ export default function EnquiryDrawer() {
                       {item.name}
                     </a>
                     <span className="label mt-1 block text-navy-900/70">{item.brand} · {item.category}</span>
+                    <span className="mt-2 flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setQuantity(item.slug, (item.quantity ?? 1) - 1)}
+                        disabled={(item.quantity ?? 1) <= 1}
+                        aria-label={`Decrease quantity of ${item.name}`}
+                        data-qty-decrease
+                        className="grid h-7 w-7 place-items-center rounded border border-navy-900/20 text-navy-900 hover:border-cyan-deep disabled:opacity-35"
+                      >
+                        −
+                      </button>
+                      <label className="sr-only" htmlFor={`qty-${item.slug}`}>Quantity of {item.name}</label>
+                      <input
+                        id={`qty-${item.slug}`}
+                        type="number"
+                        min={1}
+                        max={99}
+                        inputMode="numeric"
+                        value={item.quantity ?? 1}
+                        onChange={(event) => setQuantity(item.slug, Number(event.target.value))}
+                        data-qty-input
+                        className="h-7 w-12 rounded border border-navy-900/20 bg-white text-center text-sm text-navy-900 focus:border-cyan-deep"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setQuantity(item.slug, (item.quantity ?? 1) + 1)}
+                        disabled={(item.quantity ?? 1) >= 99}
+                        aria-label={`Increase quantity of ${item.name}`}
+                        data-qty-increase
+                        className="grid h-7 w-7 place-items-center rounded border border-navy-900/20 text-navy-900 hover:border-cyan-deep disabled:opacity-35"
+                      >
+                        +
+                      </button>
+                    </span>
                   </span>
                   <button type="button" onClick={() => remove(item.slug)} className="label shrink-0 rounded px-2 py-1 text-navy-900/70 hover:bg-ice hover:text-navy-900" aria-label={`Remove ${item.name}`}>
                     Remove
@@ -123,9 +165,22 @@ export default function EnquiryDrawer() {
 
         <div className="border-t border-navy-900/15 px-5 py-4">
           {items.length > 0 ? (
-            <a href={waLink(message)} className="btn-whatsapp w-full px-5 py-3.5" target="_blank" rel="noreferrer">
-              Send {count} item{count === 1 ? "" : "s"} on WhatsApp
-            </a>
+            <div className="grid gap-2">
+              {sendLinks.map((href, index) => (
+                <a
+                  key={href}
+                  href={href}
+                  onClick={() => setOpen(false)}
+                  className="btn-whatsapp w-full px-5 py-3.5"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {sendLinks.length > 1
+                    ? `Send part ${index + 1} of ${sendLinks.length} on WhatsApp`
+                    : `Send ${count} item${count === 1 ? "" : "s"} on WhatsApp`}
+                </a>
+              ))}
+            </div>
           ) : (
             <button type="button" disabled className="btn-whatsapp w-full px-5 py-3.5">
               Send on WhatsApp

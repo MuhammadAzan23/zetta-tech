@@ -164,6 +164,7 @@ export function productQuoteFields(product: CatalogProduct) {
     brand: normaliseBrands(featuredBrandOf(product.categories)?.name ?? "Zetta Tech"),
     category: productCategoryLabel(product),
     details: productDescription(product).slice(0, 280),
+    url: `/catalog/${product.slug}`,
   };
 }
 

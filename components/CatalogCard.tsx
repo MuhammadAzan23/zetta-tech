@@ -36,7 +36,7 @@ export default function CatalogCard({ product }: { product: CardData }) {
         </span>
       </a>
       <div className="catalog-card-body p-5">
-        <p className="label text-cyan-ink">
+        <p className="label catalog-card-meta text-cyan-ink">
           <span>{product.brand}</span>
           <span aria-hidden="true"> · </span>
           <span>{product.category}</span>

@@ -25,6 +25,7 @@ export default function AddToEnquiry({
     <button
       ref={button}
       type="button"
+      data-enquiry-detail={item.slug}
       aria-pressed={already}
       className={`btn border px-4 py-2.5 text-sm ${
         already

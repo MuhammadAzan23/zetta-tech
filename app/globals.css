@@ -375,6 +375,17 @@ html.js .site-plan .sp-label { animation: sp-settle .35s ease-out .55s both; }
   mix-blend-mode: multiply;
 }
 .catalog-card-body { display: flex; flex: 1; flex-direction: column; }
+/* The brand · category line is clamped to one line. Without this, a long category
+   ("Security & Surveillance") wraps to two lines and makes that card 17px taller
+   than its neighbours, breaking the row. */
+.catalog-card-meta {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .catalog-card-title {
   display: -webkit-box;
   -webkit-box-orient: vertical;

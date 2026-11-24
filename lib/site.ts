@@ -28,13 +28,97 @@ export const site = {
   },
 };
 
+/** Absolute URL for a site path, so messages carry a link that opens anywhere. */
+export function absoluteUrl(pathname: string) {
+  if (/^https?:\/\//i.test(pathname)) return pathname;
+  const base = site.url.replace(/\/$/, "");
+  return `${base}${pathname.startsWith("/") ? pathname : `/${pathname}`}`;
+}
+
 export function waLink(message = "Hello Zetta Tech, I would like a quote.") {
   return `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(message)}`;
 }
 
-export function productWaLink(input: { name: string; brand?: string; category?: string; details?: string }) {
+/**
+ * WhatsApp caps a wa.me `text` parameter. Around 1,500 characters is the safe
+ * ceiling forevery client; longer messages are truncated by the app, so anything
+ * above this is split into numbered parts instead of being silently cut off.
+ */
+const WA_TEXT_LIMIT = 1500;
+
+/** Split a long message on paragraph boundaries, never mid-word. */
+export function splitWhatsAppMessage(message: string, limit = WA_TEXT_LIMIT) {
+  if (message.length <= limit) return [message];
+
+  const paragraphs = message.split(/\n{2,}/);
+  const parts: string[] = [];
+  let current = "";
+
+  const push = () => {
+    if (current.trim()) parts.push(current.trim());
+    current = "";
+  };
+
+  for (const paragraph of paragraphs) {
+    const candidate = current ? `${current}\n\n${paragraph}` : paragraph;
+    if (candidate.length <= limit) {
+      current = candidate;
+      continue;
+    }
+    push();
+    if (paragraph.length <= limit) {
+      current = paragraph;
+      continue;
+    }
+    // A single paragraph longer than the limit: break on sentence, then on space.
+    let rest = paragraph;
+    while (rest.length > limit) {
+      let cut = rest.lastIndexOf(". ", limit);
+      if (cut < limit * 0.5) cut = rest.lastIndexOf(" ", limit);
+      if (cut < limit * 0.5) cut = limit;
+      parts.push(rest.slice(0, cut + 1).trim());
+      rest = rest.slice(cut + 1).trim();
+    }
+    current = rest;
+  }
+  push();
+
+  return parts.map((part, index) => `Part ${index + 1} of ${parts.length}\n\n${part}`);
+}
+
+export type QuoteInput = {
+  name: string;
+  brand?: string;
+  category?: string;
+  details?: string;
+  quantity?: number;
+  url?: string;
+};
+
+/** The message body shared by product cards and product pages. */
+export function productQuoteMessage(input: QuoteInput) {
   const details = (input.details ?? "").replace(/\s+/g, " ").trim().slice(0, 280);
-  return waLink(
-    `Hello Zetta Tech, I want a quote for this product:\n\nProduct: ${input.name}\nBrand: ${input.brand ?? "—"}\nCategory: ${input.category ?? "—"}\nDetails: ${details || "—"}\n\nPlease share price and availability.`
-  );
+  const quantity = Math.max(1, Math.floor(input.quantity ?? 1));
+  return [
+    "Hello Zetta Tech, I want a quote for this product:",
+    "",
+    `Product: ${input.name}`,
+    `Brand: ${input.brand ?? "—"}`,
+    `Category: ${input.category ?? "—"}`,
+    `Quantity: ${quantity}`,
+    `Link: ${input.url ? absoluteUrl(input.url) : "—"}`,
+    "",
+    `Details: ${details || "—"}`,
+    "",
+    "Please share price and availability.",
+  ].join("\n");
+}
+
+export function productWaLink(input: QuoteInput) {
+  return waLink(productQuoteMessage(input));
+}
+
+/** wa.me links for a product, one per part when the text is too long. */
+export function productWaParts(input: QuoteInput) {
+  return splitWhatsAppMessage(productQuoteMessage(input)).map((part) => waLink(part));
 }

@@ -45,6 +45,37 @@ export default function CatalogGrid({
   const firstPaint = useRef(true);
   const sheet = useRef<HTMLDivElement>(null);
   const sheetTrigger = useRef<HTMLButtonElement>(null);
+  const restored = useRef(false);
+
+  /**
+   * Filter state lives in the URL (`?q=…&brand=…`) so a filtered view can be
+   * shared, bookmarked and survives a reload. It is read from `window.location`
+   * on mount rather than from `useSearchParams`, which would opt this page out of
+   * static generation in the App Router. Writes use `replaceState`, so the history
+   * stays clean and typing never pushes a new entry.
+   */
+  useEffect(() => {
+    if (restored.current) return;
+    restored.current = true;
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get("q") ?? "";
+    const b = params.get("brand") ?? "";
+    if (q) setQuery(q);
+    const match = brands.find((name) => name.toLowerCase() === b.toLowerCase());
+    if (match) setBrand(match);
+  }, [brands]);
+
+  useEffect(() => {
+    if (!restored.current) return;
+    const next = new URLSearchParams();
+    if (query.trim()) next.set("q", query.trim());
+    if (brand !== "all") next.set("brand", brand);
+    const search = next.toString();
+    const target = `${window.location.pathname}${search ? `?${search}` : ""}`;
+    if (`${window.location.pathname}${window.location.search}` !== target) {
+      window.history.replaceState(window.history.state, "", target);
+    }
+  }, [query, brand]);
 
   const matches = useMemo(() => {
     const term = deferred.trim().toLowerCase();
