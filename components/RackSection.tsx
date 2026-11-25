@@ -14,7 +14,7 @@ export default function RackSection() {
     <section className="defer-paint bg-navy-950 text-white">
       <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 py-20 sm:px-6 lg:grid-cols-2">
         <Reveal stagger>
-          <p className="label text-cyan-brand">Racks and cabling</p>
+          <p className="eyebrow text-cyan-brand">Racks and cabling</p>
           <h2 className="h-display mt-3 text-4xl sm:text-5xl">The part nobody sees should still be tidy</h2>
           <ul className="mt-8 grid gap-4">
             {points.map((p) => (

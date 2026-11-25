@@ -10,7 +10,7 @@ export function Projects() {
     <section className="defer-paint mx-auto max-w-7xl px-5 py-20 sm:px-6">
       <div className="grid gap-8 lg:grid-cols-[1fr_2.2fr]">
         <Reveal>
-          <p className="label text-cyan-ink">Karachi solutions</p>
+          <p className="eyebrow text-cyan-ink">Karachi solutions</p>
           <h2 className="h-display mt-3 text-4xl text-navy-900 sm:text-5xl">Systems we plan and install</h2>
         </Reveal>
         <div>
@@ -20,7 +20,7 @@ export function Projects() {
               <li key={solution.slug} className="grid gap-1 border-b border-navy-900/15 py-5 sm:grid-cols-[1fr_1.4fr_auto] sm:items-baseline sm:gap-6">
                 <Link href={`/products/${solution.slug}`} className="link-underline w-fit font-display text-xl font-semibold text-navy-900 decoration-cyan-brand decoration-2 underline-offset-4 hover:decoration-cyan-brand">{solution.name}</Link>
                 <span className="text-navy-900/70">{solution.short}</span>
-                <span className="label text-navy-900/70">Karachi</span>
+                <span className="eyebrow text-navy-900/70">Karachi</span>
               </li>
             ))}
           </Reveal>
@@ -34,7 +34,7 @@ export function Cities() {
   return (
     <section className="defer-paint border-y border-navy-900/15 bg-white">
       <div className="mx-auto max-w-7xl px-5 py-14 sm:px-6">
-        <p className="label text-cyan-ink">Where we install</p>
+        <p className="eyebrow text-cyan-ink">Where we install</p>
         <Reveal as="ul" stagger className="mt-4 flex flex-wrap gap-x-10 gap-y-3">
           {cities.map((c) => (
             <li key={c.slug}>
@@ -90,7 +90,7 @@ export function CtaBand() {
       <Reveal stagger className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-5 py-14 sm:px-6 md:flex-row md:items-center">
         <h2 className="h-display max-w-xl text-3xl sm:text-4xl">Need a quote? WhatsApp us the model — we prefill the product details for you.</h2>
         <div className="flex flex-wrap gap-3">
-          <a href={waLink()} className="btn-whatsapp px-6 py-3.5">WhatsApp {site.phone}</a>
+          <a href={waLink()} className="btn-whatsapp">WhatsApp {site.phone}</a>
           <a href={`mailto:${site.email}`} className="btn-ghost-light">{site.email}</a>
         </div>
       </Reveal>

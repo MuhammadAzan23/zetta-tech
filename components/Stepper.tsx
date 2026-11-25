@@ -146,7 +146,7 @@ export default function Stepper({
           >
             Back
           </button>
-          <button type="submit" className={`${last ? "btn-whatsapp" : "btn-primary"} px-6 py-3 text-sm`}>
+          <button type="submit" className={`${last ? "btn-whatsapp px-5 py-3" : "btn-primary px-6 py-3"} text-sm`}>
             {primaryLabel}
           </button>
         </div>

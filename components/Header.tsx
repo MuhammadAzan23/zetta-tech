@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { site, waLink } from "@/lib/site";
+import { brandLine, site, waLink } from "@/lib/site";
 import Logo from "./Logo";
 import ProductSearch from "./ProductSearch";
 import { useEnquiry } from "./enquiry/EnquiryProvider";
@@ -112,15 +112,16 @@ export default function Header() {
         hidden ? "-translate-y-full" : "translate-y-0"
       } ${scrolled ? "header-scrolled bg-paper/95 backdrop-blur" : "bg-paper"}`}
     >
-      {/* Contact strip. Shown at every width: on phones only the WhatsApp number
-          fits, on wider screens the email joins it and the location moves in. */}
+      {/* Contact strip. Shown at every width: on phones the brand line takes its own
+          row above the WhatsApp number, because both together do not fit at 390px;
+          from `sm` they sit on one row with the email. */}
       <div className="border-b border-navy-900/10">
-        <div className="label mx-auto flex max-w-7xl items-center justify-between gap-3 px-5 py-1.5 text-navy-900/70 sm:px-6">
-          <span className="hidden sm:inline">Official ZKTeco dealer · Saddar, Karachi</span>
+        <div className="tag mx-auto flex max-w-7xl flex-col gap-0.5 px-5 py-1.5 text-navy-900/70 lg:flex-row lg:items-center lg:justify-between lg:gap-3 lg:px-6 sm:px-6">
+          <span>{brandLine.topbar}</span>
           <span className="flex min-w-0 items-center gap-3">
             <a href={waLink()} className="whitespace-nowrap hover:text-navy-900">WhatsApp {site.phone}</a>
-            <span aria-hidden="true" className="hidden sm:inline">·</span>
-            <a href={`mailto:${site.email}`} className="hidden truncate hover:text-navy-900 sm:inline">{site.email}</a>
+            <span aria-hidden="true" className="hidden lg:inline">·</span>
+            <a href={`mailto:${site.email}`} className="hidden truncate hover:text-navy-900 lg:inline">{site.email}</a>
           </span>
         </div>
       </div>
@@ -194,7 +195,7 @@ export default function Header() {
               ))}
             </ul>
             <div className="space-y-2 px-5 py-4">
-              <a href={waLink()} className="btn-whatsapp w-full px-4 py-2.5 text-sm">
+              <a href={waLink()} className="btn-whatsapp w-full">
                 WhatsApp {site.phone}
               </a>
               <a href={`mailto:${site.email}`} className="btn-outline w-full text-sm">

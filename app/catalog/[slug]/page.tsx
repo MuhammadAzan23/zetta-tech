@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import PageHero from "@/components/PageHero";
@@ -9,6 +10,7 @@ import {
   getCatalogProduct,
   productCategoryLabel,
   productDescription,
+  productDisplayName,
   productName,
   productQuoteFields,
   stripHtml,
@@ -67,7 +69,11 @@ export default function CatalogProductPage({ params }: Props) {
   const product = getCatalogProduct(params.slug);
   if (!product) notFound();
   const quote = productQuoteFields(product);
-  const name = productName(product);
+  // Visible heading: the brand is already the tag directly above it, so the title
+  // does not repeat it. The full name is still used for metadata and JSON-LD, where
+  // the brand in the title helps search.
+  const name = productDisplayName(product);
+  const fullName = productName(product);
   const description = productDescription(product);
   const category = productCategoryLabel(product);
   const specs = specRows(product);
@@ -87,7 +93,7 @@ export default function CatalogProductPage({ params }: Props) {
   const productLd = {
     "@context": "https://schema.org",
     "@type": "Product",
-    name,
+    name: fullName,
     description: description.slice(0, 500) || undefined,
     sku: product.slug,
     brand: { "@type": "Brand", name: quote.brand },
@@ -109,7 +115,7 @@ export default function CatalogProductPage({ params }: Props) {
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
       { "@type": "ListItem", position: 2, name: "Catalog", item: absoluteUrl("/catalog") },
-      { "@type": "ListItem", position: 3, name, item: absoluteUrl(`/catalog/${product.slug}`) },
+      { "@type": "ListItem", position: 3, name: fullName, item: absoluteUrl(`/catalog/${product.slug}`) },
     ],
   };
 
@@ -135,7 +141,7 @@ export default function CatalogProductPage({ params }: Props) {
           />
         </Reveal>
         <Reveal delay={0.05}>
-          <p className="label text-cyan-ink">
+          <p className="eyebrow text-cyan-ink">
             <span>{quote.brand}</span>
             <span aria-hidden="true"> · </span>
             <span>{category}</span>
@@ -149,17 +155,17 @@ export default function CatalogProductPage({ params }: Props) {
             </p>
           )}
           <div className="mt-8 flex flex-wrap gap-3">
-            <a href={productWaLink({ ...quote, quantity: 1 })} className="btn-whatsapp px-6 py-3.5">Quote on WhatsApp</a>
+            <a href={productWaLink({ ...quote, quantity: 1 })} className="btn-whatsapp">Quote on WhatsApp</a>
             <Link href="/catalog" className="btn-outline px-6 py-3.5">Back to catalog</Link>
           </div>
-          <p className="label mt-8 text-navy-900/70">Source: supplier catalog, reviewed for publication</p>
+          <p className="eyebrow mt-8 text-navy-900/70">Source: supplier catalog, reviewed for publication</p>
         </Reveal>
       </section>
 
       <section className="border-t border-navy-900/15 bg-white">
         <div className="mx-auto max-w-7xl px-5 py-14 sm:px-6">
           <Reveal>
-            <p className="label text-cyan-ink">Specification</p>
+            <p className="eyebrow text-cyan-ink">Specification</p>
             <h2 className="h-display mt-3 text-3xl text-navy-900">Technical details</h2>
             <dl className="mt-8 grid max-w-4xl border-t border-navy-900/15 sm:grid-cols-2 sm:gap-x-10">
               {[
@@ -173,7 +179,7 @@ export default function CatalogProductPage({ params }: Props) {
                 </div>
               ))}
             </dl>
-            <p className="label mt-6 text-navy-900/70">
+            <p className="eyebrow mt-6 text-navy-900/70">
               {specs.length
                 ? "Datasheet rows above come from the supplier catalogue. Confirm the exact revision with us before ordering."
                 : "This model's datasheet lists no labelled specification rows, so ask us for the PDF before ordering."}
@@ -186,7 +192,7 @@ export default function CatalogProductPage({ params }: Props) {
         <section className="border-t border-navy-900/15">
           <div className="mx-auto max-w-7xl px-5 py-14 sm:px-6">
             <Reveal>
-              <p className="label text-cyan-ink">Same category</p>
+              <p className="eyebrow text-cyan-ink">Same category</p>
               <h2 className="h-display mt-3 text-3xl text-navy-900">Related products</h2>
             </Reveal>
             <Reveal stagger className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -196,18 +202,23 @@ export default function CatalogProductPage({ params }: Props) {
                   href={`/catalog/${item.slug}`}
                   className="group border border-navy-900/15 bg-white p-4 transition-colors hover:border-navy-900/30"
                 >
-                  <span className="catalog-card-media block">
+                  <span className="catalog-card-media relative block">
                     {item.images[0] ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={item.images[0]} alt={productName(item)} loading="lazy" decoding="async" className="max-h-full max-w-full object-contain" />
+                      <Image
+                        src={item.images[0]}
+                        alt={productName(item)}
+                        fill
+                        sizes="(min-width: 1024px) 18rem, (min-width: 640px) 40vw, 88vw"
+                        className="object-contain"
+                      />
                     ) : (
-                      <span className="label text-navy-900/70">No image</span>
+                      <span className="eyebrow text-navy-900/70">No image</span>
                     )}
                   </span>
                   <span className="mt-2 block font-display text-base font-semibold leading-snug text-navy-900">
                     {productName(item)}
                   </span>
-                  <span className="label mt-2 block text-navy-900/70">{productCategoryLabel(item)}</span>
+                  <span className="eyebrow mt-2 block text-navy-900/70">{productCategoryLabel(item)}</span>
                 </Link>
               ))}
             </Reveal>

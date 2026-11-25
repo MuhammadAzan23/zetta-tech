@@ -61,7 +61,7 @@ export default function Stats() {
           <dd className="font-display text-5xl font-semibold leading-none text-white sm:text-6xl">
             <span data-count={s.value} data-suffix={s.suffix}>{s.value}{s.suffix}</span>
           </dd>
-          <dt className="label mt-3 text-cyan-brand">{s.label}</dt>
+          <dt className="eyebrow mt-3 text-cyan-brand">{s.label}</dt>
         </div>
       ))}
     </dl>

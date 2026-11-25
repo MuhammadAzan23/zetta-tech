@@ -13,7 +13,7 @@ export const site = {
     full: "V26H+75V, Saddar, Karachi, Pakistan",
   },
   description:
-    "Zetta Tech supplies, installs and configures ZKTeco access control, attendance, CCTV, thermal mapping and networking for businesses, offices and factories in Karachi.",
+    "Zetta Tech supplies, installs and configures ZKTeco attendance and access control, plus CCTV, thermal mapping and networking, for businesses, offices and factories in Karachi. We also supply Ubiquiti, Ruijie, MikroTik, Dahua, IMOU and Huawei eKit.",
   /**
    * Attendance estimate.
    *
@@ -26,6 +26,28 @@ export const site = {
     /** Every site needs at least this many terminals for the main entrance. */
     minTerminals: 1,
   },
+};
+
+/**
+ * The one brand message, used by the top bar, the hero, the brand section and the
+ * brands page. Written once here so those places cannot drift apart, and so no page
+ * can quietly upgrade "main supplier" into a dealership claim: no dealer certificate
+ * is recorded in CONTENT-SOURCES.md, so "Official" and "Authorized" must not appear.
+ */
+export const brandLine = {
+  /** Top bar. Names the position and the location. */
+  topbar: "ZKTeco main supplier · Saddar, Karachi",
+  /** Hero eyebrow: the two systems ZKTeco is actually known for here. */
+  eyebrow: "ZKTeco attendance and access control · Karachi",
+  /** Full brand list, as a sentence fragment. */
+  full: "ZKTeco, Ubiquiti, Ruijie, MikroTik, Dahua, IMOU and Huawei eKit",
+  /** Lead sentence for the brands page and brand sections. */
+  lead: "ZKTeco is our main supplier. We also supply Ubiquiti, Ruijie, MikroTik, Dahua, IMOU and Huawei eKit in Karachi.",
+  /** The one-line version of "and everything else we supply". */
+  also: "We also supply Ubiquiti, Ruijie, MikroTik, Dahua, IMOU and Huawei eKit",
+  /** Hero supporting sentence. */
+  heroSubtitle:
+    "We supply, install and configure ZKTeco systems, and also supply Ubiquiti, Ruijie, MikroTik, Dahua, IMOU and Huawei eKit.",
 };
 
 /** Absolute URL for a site path, so messages carry a link that opens anywhere. */

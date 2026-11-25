@@ -33,12 +33,35 @@ export default function CategoryPage({ params }: Props) {
   if (!c) notFound();
   const related = brands.filter((b) => c.brands.includes(b.slug));
   const showPlan = PLAN_CATEGORIES.includes(c.slug);
+  // Attendance visitors arrive looking for one of two things: a terminal count or the
+  // terminals themselves. Both sit directly under the heading, and the intro is the
+  // only thing above them, so nothing has to be scrolled past to start.
+  const isAttendance = c.slug === "attendance-management";
+
+  const builder = isAttendance ? (
+    <section className="border-b border-navy-900/15 bg-white">
+      <div className="mx-auto grid max-w-7xl gap-8 px-5 py-10 sm:px-6 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:items-start">
+        <Reveal>
+          <p className="eyebrow text-cyan-ink">Plan your setup</p>
+          <h2 className="h-display mt-2 text-3xl text-navy-900 sm:text-4xl">How many terminals will you need?</h2>
+          <p className="mt-3 max-w-md text-navy-900/75">
+            Answer six quick questions. We work out a terminal count from your staff numbers and branches, then send the whole requirement to WhatsApp.
+          </p>
+        </Reveal>
+        <Reveal delay={0.05}>
+          <AttendanceBuilder />
+        </Reveal>
+      </div>
+    </section>
+  ) : null;
+
   return (
     <>
-      <PageHero title={c.name} intro={c.description} crumbs={[{ href: "/", label: "Home" }, { href: "/#products", label: "Products" }, { href: `/products/${c.slug}`, label: c.name }]} />
+      <PageHero compact={isAttendance} title={c.name} intro={c.description} crumbs={[{ href: "/", label: "Home" }, { href: "/#products", label: "Products" }, { href: `/products/${c.slug}`, label: c.name }]} />
+      {builder}
       <section className="mx-auto grid max-w-7xl gap-12 px-5 py-16 sm:px-6 md:grid-cols-2">
         <div>
-          <h2 className="font-display text-2xl font-semibold text-navy-900">What we supply and install</h2>
+          <h2 className="font-display text-2xl font-semibold text-navy-900">{isAttendance ? "Models we install" : "What we supply and install"}</h2>
           <RuleDraw className="mt-5" />
           <Reveal as="ul" stagger>
             {c.items.map((i) => (
@@ -74,7 +97,7 @@ export default function CategoryPage({ params }: Props) {
         <section className="border-t border-navy-900/15 bg-white">
           <div className="mx-auto max-w-7xl px-5 py-16 sm:px-6">
             <Reveal>
-              <p className="label text-cyan-ink">Design the layout</p>
+              <p className="eyebrow text-cyan-ink">Design the layout</p>
               <h2 className="h-display mt-3 max-w-2xl text-3xl text-navy-900 sm:text-4xl">See the plan before the survey.</h2>
               <p className="mt-4 max-w-xl text-navy-900/75">
                 Pick your site type to see how we would place cameras, door readers and cabling. The counts update with the plan.
@@ -82,22 +105,6 @@ export default function CategoryPage({ params }: Props) {
             </Reveal>
             <Reveal delay={0.05}>
               <SitePlanDemo className="mt-8" />
-            </Reveal>
-          </div>
-        </section>
-      ) : null}
-      {c.slug === "attendance-management" ? (
-        <section className="border-t border-navy-900/15 bg-white">
-          <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 sm:px-6 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
-            <Reveal>
-              <p className="label text-cyan-ink">Plan your setup</p>
-              <h2 className="h-display mt-3 text-3xl text-navy-900 sm:text-4xl">How many terminals will you need?</h2>
-              <p className="mt-4 max-w-md text-navy-900/75">
-                Answer six quick questions. We work out a terminal count from your staff numbers and branches, then send the whole requirement to WhatsApp.
-              </p>
-            </Reveal>
-            <Reveal delay={0.05}>
-              <AttendanceBuilder />
             </Reveal>
           </div>
         </section>

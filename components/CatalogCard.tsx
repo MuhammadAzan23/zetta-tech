@@ -31,12 +31,13 @@ export default function CatalogCard({ product }: { product: CardData }) {
         <span className="catalog-card-media">
           <ProductImage
             src={product.image}
+            sizes="(min-width: 1280px) 21rem, (min-width: 1024px) 30vw, (min-width: 640px) 45vw, 90vw"
             imgClassName="transition-transform duration-500 ease-out group-hover:scale-105"
           />
         </span>
       </a>
       <div className="catalog-card-body p-5">
-        <p className="label catalog-card-meta text-cyan-ink">
+        <p className="tag catalog-card-meta text-cyan-ink">
           <span>{product.brand}</span>
           <span aria-hidden="true"> · </span>
           <span>{product.category}</span>
@@ -49,7 +50,7 @@ export default function CatalogCard({ product }: { product: CardData }) {
         ) : null}
         <div className="catalog-card-actions">
           <div className="flex gap-2">
-            <a href={product.waHref} className="btn-whatsapp min-w-0 flex-1 whitespace-nowrap px-2.5 py-2.5 text-[0.82rem]">Quote on WhatsApp</a>
+            <a href={product.waHref} className="btn-whatsapp min-w-0 flex-1 whitespace-nowrap px-2.5 py-2 text-[0.82rem]">Quote on WhatsApp</a>
             <Link href={`/catalog/${product.slug}`} className="btn shrink-0 border border-navy-900/20 px-3.5 py-2.5 text-sm font-medium text-navy-900 hover:border-cyan-deep">
               Details
             </Link>

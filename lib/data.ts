@@ -5,7 +5,7 @@ export const brands: Brand[] = [
   { slug: "ruijie-networks", name: "Ruijie", blurb: "Enterprise Wi-Fi, switches and gateways with cloud management." },
   { slug: "mikrotik", name: "MikroTik", blurb: "RouterOS routers and switches for flexible, high-value networks." },
   { slug: "dahua", name: "Dahua", blurb: "CCTV cameras, NVRs and video surveillance systems." },
-  { slug: "imou", name: "Imou", blurb: "Wi-Fi and PoE cameras for offices and smaller sites." },
+  { slug: "imou", name: "IMOU", blurb: "Wi-Fi and PoE cameras for offices and smaller sites." },
   { slug: "huawei-ekit", name: "Huawei eKit", blurb: "eKit access points, switches and security gateways." },
 ];
 
@@ -76,7 +76,7 @@ export const stats = [
 export const faqs = [
   {
     q: "Which products can I request a quote for?",
-    a: "You can request a quote for any product in our focused catalog — ZKTeco first, plus Ubiquiti, Ruijie, MikroTik, Dahua, Imou and Huawei eKit. Tap a product to open WhatsApp with the model details filled in.",
+    a: "You can request a quote for any product in our focused catalog — ZKTeco first, plus Ubiquiti, Ruijie, MikroTik, Dahua, IMOU and Huawei eKit. Tap a product to open WhatsApp with the model details filled in.",
   },
   {
     q: "Do you install the equipment as well as supply it?",

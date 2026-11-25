@@ -69,7 +69,7 @@ export default function ContactQuote({ className = "" }: { className?: string })
       render: () => (
         <div className="grid gap-4">
           <div>
-            <label htmlFor="quote-name" className="label block text-navy-900/70">Your name</label>
+            <label htmlFor="quote-name" className="eyebrow block text-navy-900/70">Your name</label>
             <input
               id="quote-name"
               name="name"
@@ -80,7 +80,7 @@ export default function ContactQuote({ className = "" }: { className?: string })
             />
           </div>
           <div>
-            <label htmlFor="quote-email" className="label block text-navy-900/70">Email</label>
+            <label htmlFor="quote-email" className="eyebrow block text-navy-900/70">Email</label>
             <input
               id="quote-email"
               name="email"
@@ -101,7 +101,7 @@ export default function ContactQuote({ className = "" }: { className?: string })
       render: () => (
         <div className="grid gap-4">
           <div>
-            <label htmlFor="quote-site" className="label block text-navy-900/70">Site type</label>
+            <label htmlFor="quote-site" className="eyebrow block text-navy-900/70">Site type</label>
             <select
               id="quote-site"
               name="site"
@@ -113,7 +113,7 @@ export default function ContactQuote({ className = "" }: { className?: string })
             </select>
           </div>
           <fieldset>
-            <legend className="label text-navy-900/70">What do you need?</legend>
+            <legend className="eyebrow text-navy-900/70">What do you need?</legend>
             <div className="mt-2 flex flex-wrap gap-2">
               {NEEDS.map((need) => {
                 const picked = form.needs.includes(need);
@@ -138,7 +138,7 @@ export default function ContactQuote({ className = "" }: { className?: string })
             </div>
           </fieldset>
           <div>
-            <label htmlFor="quote-message" className="label block text-navy-900/70">What do you need it to do?</label>
+            <label htmlFor="quote-message" className="eyebrow block text-navy-900/70">What do you need it to do?</label>
             <textarea
               id="quote-message"
               name="message"

@@ -153,6 +153,35 @@ export function productName(product: CatalogProduct) {
   return normaliseTitle(product.name);
 }
 
+/**
+ * The brand shown as the tag on a card or detail page: the leading featured brand,
+ * or "Zetta Tech" when the feed has none.
+ */
+export function productBrand(product: CatalogProduct) {
+  return normaliseBrands(featuredBrandOf(product.categories)?.name ?? "Zetta Tech");
+}
+
+/**
+ * Display name with the brand prefix removed when the tag already shows that brand.
+ *
+ * "ZKTeco AC05-AM2805H Magnetic Lock" under a "ZKTeco" tag reads as the model on its
+ * own: "AC05-AM2805H Magnetic Lock". The prefix is only removed when it is the same
+ * brand as the tag — "UniFi 6 Lite" is tagged Ubiquiti, so the UniFi stays, because
+ * dropping it would leave a title of just "6 Lite".
+ */
+export function productDisplayName(product: CatalogProduct) {
+  const name = productName(product);
+  const brand = productBrand(product);
+  if (!brand || brand === "Zetta Tech") return name;
+  const escape = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  // "Ruijie Networks" and "Huawei eKit" also appear short ("Ruijie", "Huawei").
+  const alternates = [brand, brand.split(" ")[0]].filter((value, index, all) => value && all.indexOf(value) === index);
+  const pattern = new RegExp(`^(?:${alternates.map(escape).join("|")})\\s*(?:[-–‑—·:|]\\s*)?`, "i");
+  const stripped = name.replace(pattern, "").trim();
+  // Never leave a title that is only a model fragment or empty.
+  return stripped.length >= 4 && /[a-z]/i.test(stripped) ? stripped : name;
+}
+
 /** Public one-paragraph description, or "" when the feed only had a fragment. */
 export function productDescription(product: CatalogProduct) {
   return cleanDescription(stripHtml(product.excerpt || product.description));
@@ -160,7 +189,9 @@ export function productDescription(product: CatalogProduct) {
 
 export function productQuoteFields(product: CatalogProduct) {
   return {
-    name: productName(product),
+    // Name shown next to a brand tag, so the tag is not repeated in the title.
+    // The payload still carries an explicit Brand line.
+    name: productDisplayName(product),
     brand: normaliseBrands(featuredBrandOf(product.categories)?.name ?? "Zetta Tech"),
     category: productCategoryLabel(product),
     details: productDescription(product).slice(0, 280),

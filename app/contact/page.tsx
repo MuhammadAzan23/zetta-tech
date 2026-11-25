@@ -18,8 +18,8 @@ export default function Contact() {
       <PageHero title="Contact" intro="Message us with your site type and requirements. We reply within one business day." crumbs={[{ href: "/", label: "Home" }, { href: "/contact", label: "Contact" }]} />
       <section className="mx-auto grid max-w-7xl gap-10 px-5 py-16 sm:px-6 md:grid-cols-2">
         <Reveal stagger className="grid content-start gap-4 text-lg">
-          <a href={waLink()} className="btn-whatsapp px-6 py-4">WhatsApp {site.phone}</a>
-          <a href={`mailto:${site.email}`} className="btn-outline py-4">{site.email}</a>
+          <a href={waLink()} className="btn-whatsapp">WhatsApp {site.phone}</a>
+          <a href={`mailto:${site.email}`} className="btn-outline">{site.email}</a>
           <address className="mt-4 not-italic text-navy-900/80">
             <strong className="block text-navy-900">Head office</strong>
             {site.address.full}

@@ -43,7 +43,7 @@ export default function CityPage({ params }: Props) {
                       <span className="link-underline font-display text-xl font-semibold text-navy-900">{x.name}</span>
                       <span className="mt-1 block text-sm text-navy-900/65">{x.short}</span>
                     </span>
-                    <span className="label shrink-0 text-navy-900/70">{c.name}</span>
+                    <span className="eyebrow shrink-0 text-navy-900/70">{c.name}</span>
                   </Link>
                 </li>
               ))}

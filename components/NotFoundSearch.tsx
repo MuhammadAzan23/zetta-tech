@@ -20,7 +20,7 @@ export default function NotFoundSearch() {
 
   return (
     <div className="relative max-w-md">
-      <label htmlFor="notfound-search" className="label block text-navy-900/70">Search the site</label>
+      <label htmlFor="notfound-search" className="eyebrow block text-navy-900/70">Search the site</label>
       <input
         id="notfound-search"
         type="search"

@@ -9,10 +9,17 @@ body { @apply bg-paper font-sans text-ink antialiased; }
 /* Headings: sentence case, tight, calm. */
 .h-display { @apply font-display font-semibold leading-[1.02] tracking-[-0.025em]; }
 .bg-grid { background: none; }
-.label { @apply font-mono text-[0.72rem] uppercase tracking-[0.14em]; }
 
-/* The cyan "deep" tone is a little dark for small text on paper; labels use the
-   darker cyan ink so they pass AA without changing the brand palette. */
+/* Two label roles, kept apart on purpose.
+ *
+ * `.eyebrow` is prose: section intros, form labels, counters. Sentence case at 13px
+ * minimum, so it reads as text rather than a stamp.
+ * `.tag` is a marker: the very top bar, brand/category chips, figure captions and
+ * table keys. Mono, uppercase and tracked, because it labels rather than speaks. */
+.eyebrow { @apply font-sans text-[0.8125rem] font-medium tracking-[-0.005em]; }
+.tag { @apply font-mono text-[0.72rem] uppercase tracking-[0.14em]; }
+
+/* The darker cyan for labels: the "deep" tone is too light for small text on paper. */
 .label-cyan { color: #066C92; }
 
 :focus-visible { outline: 2px solid #0A8DBD; outline-offset: 3px; }
@@ -58,16 +65,22 @@ html.js [data-rule] {
   transform-origin: left;
 }
 
-/* Hero headline lines are clip-masked and rise into place at first paint,
-   with no JS involved, so the H1 never waits for hydration. */
-html.js .line-mask { overflow: hidden; display: block; }
+/* Hero headline phrases rise into place at first paint, with no JS involved, so the
+   H1 never waits for hydration.
+
+   The phrases flow inline rather than each taking its own line: the mask is inline
+   and the translate starts inside the line box, so a phrase that wraps on a narrow
+   column still rises correctly instead of forcing the headline wider than its
+   column. `overflow: hidden` is kept off the container for the same reason. */
+html.js .line-mask { display: inline; }
 html.js .line-mask > span {
-  display: block;
+  display: inline;
   animation: line-rise .8s cubic-bezier(.16, .8, .3, 1) both;
 }
 html.js .line-mask:nth-of-type(2) > span { animation-delay: .08s; }
-html.js .line-mask:nth-of-type(3) > span { animation-delay: .16s; }
-@keyframes line-rise { from { transform: translateY(110%); } to { transform: none; } }
+html.js .line-mask:nth-of-type(3) > span { animation-delay: .14s; }
+html.js .line-mask:nth-of-type(4) > span { animation-delay: .2s; }
+@keyframes line-rise { from { transform: translateY(.4em); opacity: 0; } to { transform: none; opacity: 1; } }
 
 /* Hero supporting content: transform only, so text paints immediately. */
 html.js [data-hero-fade] { animation: hero-fade .5s cubic-bezier(.22, .7, .3, 1) both; animation-delay: .28s; }
@@ -111,8 +124,11 @@ html.js [data-hero-fade]:nth-of-type(1) { animation-delay: .2s; }
 .btn:disabled { @apply cursor-not-allowed opacity-50; }
 .btn-primary { @apply btn bg-navy-900 text-white hover:bg-navy-800; }
 /* WhatsApp green is far too light for white text (1.98:1). Dark navy on the same
-   brand green reads at 7.9:1 and keeps the recognisable colour. */
-.btn-whatsapp { @apply btn bg-[#25D366] text-navy-950 hover:bg-[#1ebe5d] hover:text-navy-950; }
+   brand green reads at 7.9:1 and keeps the recognisable colour.
+   Green is reserved for WhatsApp itself, and sized like a secondary action so it
+   never outranks the navy primary button beside it. */
+.btn-whatsapp { @apply btn bg-[#25D366] px-4 py-2.5 text-[0.875rem] text-navy-950 hover:bg-[#1ebe5d] hover:text-navy-950; }
+.btn-whatsapp-sm { @apply btn-whatsapp px-3.5 py-2 text-[0.82rem]; }
 .btn-outline { @apply btn border border-navy-900 px-6 py-3.5 text-navy-900 hover:bg-white; }
 .btn-ghost-light { @apply btn border border-white/40 px-6 py-3.5 text-white hover:bg-white/10; }
 
@@ -365,6 +381,15 @@ html.js .site-plan .sp-label { animation: sp-settle .35s ease-out .55s both; }
   place-items: center;
   padding: 1.25rem;
   overflow: hidden;
+}
+/* Wrapper for next/image in a sized tile: fills the parent box, keeps the
+   product cut-out contained rather than cropped. */
+.product-image {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
 }
 /* Product photos in this feed are cut-outs on white. Multiply drops that white
    into the tile so every card reads as one surface. */
@@ -653,67 +678,48 @@ html.js .site-plan .sp-label { animation: sp-settle .35s ease-out .55s both; }
 }
 .plan-demo-note { color: rgba(5, 34, 76, .7); font-size: .78rem; line-height: 1.5; margin: 0; }
 
-/* ---------- Logo trust marquee ---------- */
-/* Seamless loop: four identical rows, travel exactly one row's width (-25%), spacing
-   on each item so the seam has the same gap as everywhere else. Four copies keep the
-   track wider than any viewport plus one copy, so the loop never opens a gap. Masked
-   edges fade the row out instead of cutting it. */
-.logo-marquee {
-  --logo-fade: 3rem;
-  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 var(--logo-fade), #000 calc(100% - var(--logo-fade)), transparent 100%);
-  mask-image: linear-gradient(to right, transparent 0, #000 var(--logo-fade), #000 calc(100% - var(--logo-fade)), transparent 100%);
-  overflow: hidden;
-  width: 100%;
+/* ---------- Mobile contact bar ---------- */
+/* Pinned to the bottom on phones only; the header and footer carry these actions
+   on desktop. Two equal targets, navy for Call and brand green for WhatsApp, so
+   neither is a floating circle over the content.
+   The height variable includes the 1px top border: the body reserves exactly this,
+   so the bar can never clip the last line of the footer. */
+.mobile-bar {
+  --mobile-bar-action-h: 3.25rem;
+  --mobile-bar-border: 1px;
+  --mobile-bar-h: calc(var(--mobile-bar-action-h) + var(--mobile-bar-border));
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 45;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: rgba(5, 34, 76, .15);
+  border-top: var(--mobile-bar-border) solid rgba(5, 34, 76, .15);
+  padding-bottom: env(safe-area-inset-bottom);
+  box-shadow: 0 -6px 20px rgba(5, 34, 76, .08);
 }
-.logo-marquee-track {
-  animation: logo-marquee 38s linear infinite;
-  animation-play-state: paused;
-  display: flex;
-  width: max-content;
-  will-change: transform;
-}
-/* Only run while the band is on screen and motion is welcome. */
-.logo-marquee-track[data-running="true"] { animation-play-state: running; }
-.logo-marquee:hover .logo-marquee-track,
-.logo-marquee:focus-within .logo-marquee-track { animation-play-state: paused; }
-@keyframes logo-marquee { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-25%, 0, 0); } }
-
-.logo-set { display: flex; flex: none; list-style: none; margin: 0; padding: 0; }
-.logo-item { display: flex; align-items: center; padding-right: clamp(1.75rem, 4vw, 3.5rem); }
-.logo-link {
-  align-items: center;
-  color: rgba(5, 34, 76, .62);
+.mobile-bar-action {
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
   gap: .5rem;
-  transition: color .25s ease-out;
-  white-space: nowrap;
-}
-.logo-link:hover,
-.logo-link:focus-visible { color: #05224C; }
-.logo-link:focus-visible { outline: 2px solid #0A8DBD; outline-offset: 4px; }
-.logo-wordmark {
-  font-family: "Bricolage Grotesque", system-ui, sans-serif;
-  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  min-height: var(--mobile-bar-action-h);
+  background: #05224C;
+  color: #fff;
+  font-size: .9375rem;
   font-weight: 600;
-  letter-spacing: -.01em;
+  transition: background-color .2s ease-out;
 }
-.logo-mark { display: block; height: auto; max-height: 2rem; width: auto; }
-.logo-note {
-  background: #36CDFF;
-  color: #031A3B;
-  font-family: "IBM Plex Mono", ui-monospace, monospace;
-  font-size: .58rem;
-  letter-spacing: .1em;
-  padding: .15rem .35rem;
-  text-transform: uppercase;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .logo-marquee { -webkit-mask-image: none; mask-image: none; }
-  .logo-marquee-track { animation: none !important; flex-wrap: wrap; transform: none !important; width: 100%; }
-  .logo-marquee-track .logo-set:not(:first-child) { display: none; }
-  .logo-set:first-child { flex-wrap: wrap; gap: .75rem 1.5rem; padding: 0 1.25rem; }
-  .logo-item { padding-right: 0; }
+.mobile-bar-action:hover { background: #0B3068; }
+.mobile-bar-action.is-whatsapp { background: #25D366; color: #031A3B; }
+.mobile-bar-action.is-whatsapp:hover { background: #1ebe5d; }
+/* Reserve the bar's height so it never covers the last line of the footer.
+   Kept in sync with `.mobile-bar` above; the `lg` breakpoint matches the bar's own
+   `lg:hidden`. */
+@media (max-width: 1023px) {
+  body { padding-bottom: calc(3.25rem + 1px + env(safe-area-inset-bottom)); }
 }
 
 /* ---------- Light-beam primary CTA ---------- */

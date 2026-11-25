@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { site, waLink } from "@/lib/site";
+import { brandLine, site, waLink } from "@/lib/site";
 import { categories } from "@/lib/data";
 import { catalogBrands } from "@/lib/catalog";
 import Logo from "./Logo";
@@ -11,9 +11,9 @@ export default function Footer() {
       <Reveal stagger className="mx-auto grid max-w-7xl gap-10 px-5 py-14 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div>
           <Logo light />
-          <p className="mt-4 max-w-xs text-sm text-white/70">{site.tagline}. We supply, install and configure.</p>
+          <p className="mt-4 max-w-xs text-sm text-white/70">{brandLine.lead}</p>
           <address className="mt-6 text-sm not-italic leading-relaxed text-white/80">
-            <span className="label block text-cyan-brand">Head office</span>
+            <span className="eyebrow block text-cyan-brand">Head office</span>
             {site.address.full}
           </address>
           <p className="mt-3 text-sm">
@@ -26,7 +26,7 @@ export default function Footer() {
         <FooterList title="Brands" items={catalogBrands.map((brand) => ({ href: `/brands/${brand.slug}`, label: brand.name }))} />
         <FooterList title="Location" items={[{ href: "/locations/karachi", label: "Karachi office" }, { href: "/contact", label: "Contact" }]} />
       </Reveal>
-      <div className="label border-t border-white/10 px-5 py-5 text-center text-white/70">
+      <div className="eyebrow border-t border-white/10 px-5 py-5 text-center text-white/70">
         © {new Date().getFullYear()} {site.name} · Brand names belong to their respective owners
       </div>
     </footer>
@@ -36,7 +36,7 @@ export default function Footer() {
 function FooterList({ title, items }: { title: string; items: { href: string; label: string }[] }) {
   return (
     <div>
-      <h2 className="label text-cyan-brand">{title}</h2>
+      <h2 className="eyebrow text-cyan-brand">{title}</h2>
       <ul className="mt-4 grid gap-2.5 text-sm text-white/80">
         {items.map((item) => (
           <li key={item.href}>

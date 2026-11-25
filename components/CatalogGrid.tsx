@@ -232,7 +232,7 @@ export default function CatalogGrid({
       <div className="filter-bar -mx-5 mb-8 hidden border-b border-navy-900/15 bg-paper px-5 py-3 md:block sm:-mx-6 sm:px-6">
         <div className="flex items-center gap-3">
           <div className="w-full max-w-sm">{searchField("catalog-filter", "catalog-count")}</div>
-          <p id="catalog-count" aria-live="polite" className="label ml-auto shrink-0 whitespace-nowrap text-navy-900/70">
+          <p id="catalog-count" aria-live="polite" className="eyebrow ml-auto shrink-0 whitespace-nowrap text-navy-900/70">
             {matches.length.toLocaleString()} match{matches.length === 1 ? "" : "es"}
           </p>
         </div>
@@ -255,7 +255,7 @@ export default function CatalogGrid({
           Filters
           {activeFilters ? <span className="grid h-5 min-w-5 place-items-center rounded-full bg-navy-900 px-1 font-mono text-[0.65rem] font-semibold text-white">{activeFilters}</span> : null}
         </button>
-        <p aria-live="polite" className="label ml-auto whitespace-nowrap text-navy-900/70">
+        <p aria-live="polite" className="eyebrow ml-auto whitespace-nowrap text-navy-900/70">
           <span id="catalog-count-mobile">{matches.length.toLocaleString()} match{matches.length === 1 ? "" : "es"}</span>
         </p>
       </div>
@@ -278,7 +278,7 @@ export default function CatalogGrid({
               </button>
             </div>
             {searchField("catalog-filter-mobile", "catalog-count-mobile")}
-            <p className="label mt-5 text-cyan-ink">Brand</p>
+            <p className="eyebrow mt-5 text-cyan-ink">Brand</p>
             <div className="mt-2">{brandChips("mobile")}</div>
             <div className="mt-6 flex items-center gap-3">
               <button

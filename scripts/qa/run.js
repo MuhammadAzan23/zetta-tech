@@ -392,7 +392,7 @@ async function withPage(browser, opts = {}, fn) {
         return {
           h: Math.round(c.getBoundingClientRect().height),
           title: window.__n(c.querySelector("h2")?.textContent || ""),
-          meta: window.__n(c.querySelector(".label")?.textContent || ""),
+          meta: window.__n(c.querySelector(".tag")?.textContent || ""),
           hasImg: !!img,
           imgSrc: img?.getAttribute("src") || "",
           imgBroken: img ? img.complete && img.naturalWidth === 0 : null,
@@ -545,38 +545,43 @@ async function withPage(browser, opts = {}, fn) {
     record(10, "Plan draws cameras for every variant", variants.every((v) => v.camerasDrawn > 0), variants.map((v) => v.camerasDrawn));
   });
 
-  /* -------------------------------------------- 11. marquee + thermal show */
+  /* -------------------------------------- 11. brand band + thermal show */
+  // The rotating marquee was replaced by a static band that states the hierarchy:
+  // ZKTeco first and larger as main supplier, the rest under "We also supply".
   await withPage(browser, {}, async (page) => {
     await page.goto(BASE + "/", { waitUntil: "load" });
-    const marquee = page.locator(".logo-marquee").first();
-    await marquee.scrollIntoViewIfNeeded();
-    await wait(700);
-    const running = await page.evaluate(() => {
-      const t = document.querySelector(".logo-marquee-track");
-      return "paused";
-    });
-    const baseState = await page.evaluate(() => {
-      const t = document.querySelector(".logo-marquee-track");
-      return t ? getComputedStyle(t).animationPlayState : null;
-    });
-    await marquee.hover();
+    const band = page.locator("#brands").first();
+    await band.scrollIntoViewIfNeeded();
     await wait(300);
-    const hoverState = await page.evaluate(() => getComputedStyle(document.querySelector(".logo-marquee-track")).animationPlayState);
-    record(11, "Marquee pauses on hover", hoverState === "paused", { hoverState });
 
-    const names = await page.evaluate(() => [...document.querySelectorAll(".logo-item")].filter((n) => !n.closest("[aria-hidden='true']")).map((n) => n.textContent.trim()).slice(0, 7));
-    record(11, "Marquee falls back to brand names", names.length >= 5, { names });
-
-    // Keyboard focus pause.
-    await page.evaluate(() => document.querySelector(".logo-item a, .logo-item")?.focus());
-    await wait(250);
-    const focusState = await page.evaluate(() => {
-      const w = document.querySelector(".logo-marquee");
-      return w && w.matches(":focus-within") ? getComputedStyle(document.querySelector(".logo-marquee-track")).animationPlayState : "nofocus";
+    const bandData = await page.evaluate(() => {
+      const section = document.querySelector("#brands");
+      if (!section) return null;
+      const links = [...section.querySelectorAll("a[href^='/brands/']")];
+      const zk = links.find((a) => /zkteco/i.test(a.textContent || ""));
+      const rest = links.filter((a) => a !== zk);
+      const fontOf = (el) => (el ? parseFloat(getComputedStyle(el).fontSize) : 0);
+      return {
+        zkFont: fontOf(zk?.querySelector("span, img")),
+        maxRestFont: Math.max(...rest.map((a) => fontOf(a.querySelector("span, img")))),
+        names: links.map((a) => (a.textContent || "").trim()).filter(Boolean),
+        zkFirst: links[0] === zk,
+        text: (section.textContent || "").replace(/\s+/g, " "),
+      };
     });
-    record(11, "Marquee pauses on focus or is not focusable", focusState === "paused" || focusState === "nofocus", { focusState });
-  });
 
+    record(11, "Brand band renders", Boolean(bandData), { hasBand: Boolean(bandData) });
+    record(11, "ZKTeco is listed first in the brand band", bandData?.zkFirst === true, { first: bandData?.names[0] });
+    record(11, "ZKTeco is set larger than the other brands", (bandData?.zkFont ?? 0) > (bandData?.maxRestFont ?? 0), { zkFont: bandData?.zkFont, maxRestFont: bandData?.maxRestFont });
+    record(11, "Brand band names the main supplier", /Main supplier/i.test(bandData?.text ?? ""), { found: /Main supplier/i.test(bandData?.text ?? "") });
+    record(11, "Other brands are introduced as also supplied", /We also supply/i.test(bandData?.text ?? ""), { found: /We also supply/i.test(bandData?.text ?? "") });
+    record(11, "All seven brands appear", ["ZKTeco", "Ubiquiti", "Ruijie", "MikroTik", "Dahua", "IMOU", "Huawei eKit"].every((n) => bandData?.names.includes(n)), { names: bandData?.names });
+    record(11, "No dealership claim in the brand band", !/official|authori[sz]ed/i.test(bandData?.text ?? ""), { claim: /official|authori[sz]ed/i.test(bandData?.text ?? "") });
+
+    // Keyboard reachability of the brand links.
+    const focusable = await page.evaluate(() => [...document.querySelectorAll("#brands a[href^='/brands/']")].every((a) => a.tabIndex >= 0));
+    record(11, "Brand links are keyboard reachable", focusable, { focusable });
+  });
   await withPage(browser, {}, async (page) => {
     await page.goto(BASE + "/products/cctv-nvrs", { waitUntil: "load" });
     const thermal = page.locator(".thermal-showcase").first();
@@ -665,7 +670,7 @@ async function withPage(browser, opts = {}, fn) {
     const ctx = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 1440, height: 900 } });
     const page = await ctx.newPage();
     for (const [pathname, needle] of [
-      ["/", "Thermal mapping"],
+      ["/", "ZKTeco attendance"],
       ["/catalog", "Focused catalog"],
       ["/catalog/c05-am2802h-magnetic-lock", "Magnetic Lock"],
     ]) {

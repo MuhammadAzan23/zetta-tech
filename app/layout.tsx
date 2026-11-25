@@ -3,7 +3,7 @@ import "./fonts.css";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import WhatsAppFab from "@/components/WhatsAppFab";
+import MobileBar from "@/components/MobileBar";
 import { EnquiryProvider } from "@/components/enquiry/EnquiryProvider";
 import EnquiryDrawer from "@/components/enquiry/EnquiryDrawer";
 import EnquiryBinder from "@/components/enquiry/EnquiryBinder";
@@ -14,7 +14,7 @@ import { cities } from "@/lib/data";
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: "Zetta Tech | CCTV, Access Control & Networking in Karachi",
+    default: "Zetta Tech | ZKTeco main supplier in Karachi",
     template: "%s | Zetta Tech",
   },
   description: site.description,
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     type: "website",
     siteName: site.name,
     locale: "en_PK",
-    title: "Zetta Tech | Complete Security & Networking Solutions",
+    title: "Zetta Tech | ZKTeco attendance, access control and CCTV in Karachi",
     description: site.description,
   },
   robots: { index: true, follow: true },
@@ -66,7 +66,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Header />
           <main id="main">{children}</main>
           <Footer />
-          <WhatsAppFab />
+          <MobileBar />
           <EnquiryDrawer />
           <EnquiryBinder />
           <RevealObserver />

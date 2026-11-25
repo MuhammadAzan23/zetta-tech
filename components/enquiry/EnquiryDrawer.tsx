@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import { useEnquiry } from "./EnquiryProvider";
 import { absoluteUrl, splitWhatsAppMessage, waLink } from "@/lib/site";
 
@@ -87,7 +88,7 @@ export default function EnquiryDrawer() {
       >
         <div className="flex items-start justify-between border-b border-navy-900/15 px-5 py-4">
           <div>
-            <p className="label text-cyan-ink">Prepared enquiries</p>
+            <p className="eyebrow text-cyan-ink">Prepared enquiries</p>
             <h2 id="enquiry-title" className="font-display text-2xl font-semibold text-navy-900">
               Enquiry list <span className="text-navy-900/70">({count})</span>
             </h2>
@@ -107,18 +108,18 @@ export default function EnquiryDrawer() {
             <ul className="grid gap-3">
               {items.map((item) => (
                 <li key={item.slug} className="flex items-start gap-3 border border-navy-900/15 bg-white p-3">
-                  <span className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden bg-ice">
+                  <span className="relative grid h-14 w-14 shrink-0 place-items-center overflow-hidden bg-ice">
                     {item.image ? (
-                      <img src={item.image} alt="" className="max-h-full max-w-full object-contain" loading="lazy" decoding="async" />
+                      <Image src={item.image} alt="" fill sizes="3.5rem" className="object-contain" />
                     ) : (
-                      <span className="label text-navy-900/70">—</span>
+                      <span className="eyebrow text-navy-900/70">—</span>
                     )}
                   </span>
                   <span className="min-w-0 flex-1">
                     <a href={item.href} className="block truncate font-semibold text-navy-900 underline decoration-transparent underline-offset-4 hover:decoration-cyan-brand">
                       {item.name}
                     </a>
-                    <span className="label mt-1 block text-navy-900/70">{item.brand} · {item.category}</span>
+                    <span className="eyebrow mt-1 block text-navy-900/70">{item.brand} · {item.category}</span>
                     <span className="mt-2 flex items-center gap-2">
                       <button
                         type="button"
@@ -154,7 +155,7 @@ export default function EnquiryDrawer() {
                       </button>
                     </span>
                   </span>
-                  <button type="button" onClick={() => remove(item.slug)} className="label shrink-0 rounded px-2 py-1 text-navy-900/70 hover:bg-ice hover:text-navy-900" aria-label={`Remove ${item.name}`}>
+                  <button type="button" onClick={() => remove(item.slug)} className="eyebrow shrink-0 rounded px-2 py-1 text-navy-900/70 hover:bg-ice hover:text-navy-900" aria-label={`Remove ${item.name}`}>
                     Remove
                   </button>
                 </li>
@@ -171,7 +172,7 @@ export default function EnquiryDrawer() {
                   key={href}
                   href={href}
                   onClick={() => setOpen(false)}
-                  className="btn-whatsapp w-full px-5 py-3.5"
+                  className="btn-whatsapp w-full"
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -182,12 +183,12 @@ export default function EnquiryDrawer() {
               ))}
             </div>
           ) : (
-            <button type="button" disabled className="btn-whatsapp w-full px-5 py-3.5">
+            <button type="button" disabled className="btn-whatsapp w-full">
               Send on WhatsApp
             </button>
           )}
           {items.length > 0 ? (
-            <button type="button" onClick={clear} className="label mt-3 w-full rounded py-2 text-navy-900/70 hover:text-navy-900">
+            <button type="button" onClick={clear} className="eyebrow mt-3 w-full rounded py-2 text-navy-900/70 hover:text-navy-900">
               Clear list
             </button>
           ) : null}

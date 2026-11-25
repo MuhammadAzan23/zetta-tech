@@ -8,7 +8,7 @@ import { categories } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "About Zetta Tech",
-  description: "Zetta Tech is an official dealer and installer of security and networking systems, based in Saddar, Karachi.",
+  description: "Zetta Tech is a security and networking supplier and installer based in Saddar, Karachi. ZKTeco is our main supplier.",
   alternates: { canonical: "/about" },
 };
 
@@ -34,7 +34,7 @@ export default function About() {
           <Reveal as="dl" stagger>
             {facts.map(([term, detail]) => (
               <div key={term} className="grid gap-1 border-b border-navy-900/15 py-5 sm:grid-cols-[8rem_1fr] sm:gap-6">
-                <dt className="label text-navy-900/70">{term}</dt>
+                <dt className="eyebrow text-navy-900/70">{term}</dt>
                 <dd className="text-navy-900/85">{detail}</dd>
               </div>
             ))}
@@ -43,7 +43,7 @@ export default function About() {
       </section>
       <section className="border-y border-navy-900/15 bg-white">
         <div className="mx-auto max-w-7xl px-5 py-14 sm:px-6">
-          <p className="label text-cyan-ink">What we install</p>
+          <p className="eyebrow text-cyan-ink">What we install</p>
           <Reveal as="ul" stagger className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {categories.map((category) => (
               <li key={category.slug} className="border border-navy-900/15 bg-paper px-4 py-3 font-medium text-navy-900">{category.name}</li>

@@ -37,59 +37,32 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     };
   });
 
-  // ---------- C3: logo marquee ----------
-  out.marquee = await page.evaluate(() => {
-    const track = document.querySelector(".logo-marquee-track");
-    if (!track) return { found: false };
-    const sets = track.querySelectorAll(".logo-set");
-    const first = sets[0];
-    const second = sets[1];
-    const cs = getComputedStyle(track);
+  // ---------- C3: brand band ----------
+  // Static since the marquee was replaced: ZKTeco first and larger, the rest under
+  // "We also supply". No rotation to measure, so this records the hierarchy instead.
+  out.brandBand = await page.evaluate(() => {
+    const section = document.querySelector("#brands");
+    if (!section) return { found: false };
+    const links = [...section.querySelectorAll("a[href^='/brands/']")];
+    const zk = links.find((a) => /zkteco/i.test(a.textContent || ""));
+    const fontOf = (a) => (a ? parseFloat(getComputedStyle(a.querySelector("span, img")).fontSize) : 0);
     return {
       found: true,
-      sets: sets.length,
-      itemsPerSet: first.querySelectorAll(".logo-item").length,
-      duplicateHidden: second.getAttribute("aria-hidden"),
-      duplicateTabIndex: second.querySelector("a")?.tabIndex,
-      animation: cs.animationName,
-      playState: cs.animationPlayState,
-      running: track.dataset.running,
-      mask: getComputedStyle(document.querySelector(".logo-marquee")).maskImage !== "none",
-      /* identical width is what makes the -50% loop seamless */
-      firstWidth: Math.round(first.getBoundingClientRect().width),
-      secondWidth: Math.round(second.getBoundingClientRect().width),
-      names: [...first.querySelectorAll(".logo-wordmark")].map((n) => n.textContent),
-      imgs: first.querySelectorAll("img").length,
+      first: (links[0]?.textContent || "").trim(),
+      zkFirst: links[0] === zk,
+      zkFont: fontOf(zk),
+      maxOtherFont: Math.max(...links.filter((a) => a !== zk).map(fontOf)),
+      names: links.map((a) => (a.textContent || "").trim()).filter(Boolean),
+      text: (section.textContent || "").replace(/\s+/g, " ").trim(),
       overflowX: document.documentElement.scrollWidth - document.documentElement.clientWidth,
     };
   });
 
-  // Pause on hover.
-  const marqueeBox = await page.evaluate(() => {
-    const r = document.querySelector(".logo-marquee").getBoundingClientRect();
-    return { x: r.x + r.width / 2, y: r.y + r.height / 2 };
-  });
-  await page.mouse.move(marqueeBox.x, marqueeBox.y);
-  await wait(200);
-  out.marqueeHover = await page.evaluate(
-    () => getComputedStyle(document.querySelector(".logo-marquee-track")).animationPlayState,
-  );
-  await page.mouse.move(5, 5);
-
-  // Pause while off-screen.
-  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-  await wait(700);
-  out.marqueeOffscreen = await page.evaluate(() => {
-    const t = document.querySelector(".logo-marquee-track");
-    return { running: t.dataset.running, playState: getComputedStyle(t).animationPlayState };
-  });
-
-  await page.evaluate(() => window.scrollTo(0, 0));
-  await wait(900);
-  await page.screenshot({ path: ".ohmyagent/home-hero.png", clip: { x: 0, y: 0, width: 1280, height: 700 } });
-  await page.evaluate(() => document.querySelector(".logo-marquee").scrollIntoView({ block: "center" }));
+  await page.evaluate(() => document.querySelector("#brands").scrollIntoView({ block: "center" }));
   await wait(500);
-  await page.screenshot({ path: ".ohmyagent/logo-marquee.png" });
+  await page.screenshot({ path: ".ohmyagent/brand-band.png", fullPage: false });
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await wait(400);
 
   // ---------- C1: attendance stepper ----------
   await page.goto(`${BASE}/products/attendance-management`, { waitUntil: "load", timeout: 120000 });
@@ -261,12 +234,10 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   await rm.goto(`${BASE}/`, { waitUntil: "load", timeout: 120000 });
   await wait(800);
   out.reducedMotion = await rm.evaluate(() => {
-    const track = document.querySelector(".logo-marquee-track");
-    const sets = track.querySelectorAll(".logo-set");
+    const band = document.querySelector("#brands");
     return {
-      marqueeAnimation: getComputedStyle(track).animationName,
-      marqueeWrap: getComputedStyle(track).flexWrap,
-      duplicateDisplay: getComputedStyle(sets[1]).display,
+      // The brand band is static at every setting, so it must simply be present.
+      bandVisible: Boolean(band) && band.getBoundingClientRect().height > 0,
       beamAnimation: getComputedStyle(document.querySelector(".beam-button"), "::before").animationName,
       beamBackground: getComputedStyle(document.querySelector(".beam-button"), "::before").backgroundImage,
     };

@@ -47,7 +47,7 @@ export default function CatalogPage() {
       <section className="mx-auto max-w-7xl px-5 py-12 sm:px-6">
         <Reveal stagger className="grid gap-8 border-b border-navy-900/15 pb-10 lg:grid-cols-[1fr_2fr]">
           <div>
-            <p className="label text-cyan-ink">Browse by brand</p>
+            <p className="eyebrow text-cyan-ink">Browse by brand</p>
             <div className="mt-4 flex flex-wrap gap-2">
               {catalogBrands.map((brand) => (
                 <Link key={brand.slug} href={`/brands/${brand.slug}`} className="rounded border border-navy-900/20 px-3 py-2 text-sm font-medium transition-colors hover:border-cyan-deep hover:bg-ice">
@@ -57,7 +57,7 @@ export default function CatalogPage() {
             </div>
           </div>
           <div>
-            <p className="label text-cyan-ink">Browse by category</p>
+            <p className="eyebrow text-cyan-ink">Browse by category</p>
             <div className="mt-4 flex flex-wrap gap-2">
               {topCategories.map((category) => (
                 <Link key={category.slug} href={`/catalog/category/${category.slug}`} className="rounded border border-navy-900/20 px-3 py-2 text-sm font-medium transition-colors hover:border-cyan-deep hover:bg-ice">
@@ -69,10 +69,10 @@ export default function CatalogPage() {
         </Reveal>
         <div className="flex items-end justify-between gap-4 py-10">
           <div>
-            <p className="label text-cyan-ink">All products</p>
+            <p className="eyebrow text-cyan-ink">All products</p>
             <h2 className="h-display mt-2 text-4xl text-navy-900">Focused catalog</h2>
           </div>
-          <p className="label text-navy-900/70">{catalogProducts.length.toLocaleString()} items</p>
+          <p className="eyebrow text-navy-900/70">{catalogProducts.length.toLocaleString()} items</p>
         </div>
         <CatalogGrid
           items={catalogGridItems(catalogProducts)}

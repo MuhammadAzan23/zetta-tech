@@ -26,6 +26,13 @@ export function WhatsApp({ className = "" }: { className?: string }) {
     </svg>
   );
 }
+export function Phone({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M6.6 3h-.9A2.7 2.7 0 0 0 3 5.7c0 8.4 6.9 15.3 15.3 15.3a2.7 2.7 0 0 0 2.7-2.7v-.9a1 1 0 0 0-.8-1l-3.6-.7a1 1 0 0 0-1 .4l-1 1.4a12 12 0 0 1-5.3-5.3l1.4-1a1 1 0 0 0 .4-1l-.7-3.6a1 1 0 0 0-1-.8z" />
+    </svg>
+  );
+}
 export function CategoryIcon({ slug, className = "" }: { slug: string; className?: string }) {
   const p = { className, viewBox: "0 0 48 48", fill: "none", stroke: "currentColor", strokeWidth: 3, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, "aria-hidden": true };
   switch (slug) {

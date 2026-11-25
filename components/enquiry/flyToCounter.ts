@@ -38,7 +38,11 @@ export function flyToCounter(source: HTMLElement, image?: string) {
 
   if (image) {
     const img = document.createElement("img");
-    img.src = image;
+    // The chip is 44px: ask Next's optimiser for a 96px variant rather than pulling
+    // the original, which can be a 1.5 MB PNG.
+    img.src = /^\/[^/]/.test(image) && !image.startsWith("/_next/")
+      ? `/_next/image?url=${encodeURIComponent(image)}&w=96&q=75`
+      : image;
     img.alt = "";
     img.style.cssText = "max-width:100%;max-height:100%;object-fit:contain";
     chip.appendChild(img);

@@ -56,7 +56,7 @@ export default function ContactForm() {
 
       <div className="mt-6 grid gap-4">
         <div>
-          <label htmlFor={ids.name} className="label block text-navy-900/70">{labels.name}</label>
+          <label htmlFor={ids.name} className="eyebrow block text-navy-900/70">{labels.name}</label>
           <input
             id={ids.name}
             name="name"
@@ -68,7 +68,7 @@ export default function ContactForm() {
           />
         </div>
         <div>
-          <label htmlFor={ids.email} className="label block text-navy-900/70">{labels.email}</label>
+          <label htmlFor={ids.email} className="eyebrow block text-navy-900/70">{labels.email}</label>
           <input
             id={ids.email}
             name="email"
@@ -81,7 +81,7 @@ export default function ContactForm() {
           />
         </div>
         <div>
-          <label htmlFor={ids.site} className="label block text-navy-900/70">{labels.site}</label>
+          <label htmlFor={ids.site} className="eyebrow block text-navy-900/70">{labels.site}</label>
           <select
             id={ids.site}
             name="site"
@@ -93,7 +93,7 @@ export default function ContactForm() {
           </select>
         </div>
         <div>
-          <label htmlFor={ids.message} className="label block text-navy-900/70">{labels.message}</label>
+          <label htmlFor={ids.message} className="eyebrow block text-navy-900/70">{labels.message}</label>
           <textarea
             id={ids.message}
             name="message"

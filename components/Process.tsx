@@ -19,7 +19,7 @@ export default function Process() {
       <JourneyLine />
       <div className="mx-auto max-w-7xl px-5 py-20 sm:px-6">
         <Reveal>
-          <p className="label text-cyan-ink">How we work</p>
+          <p className="eyebrow text-cyan-ink">How we work</p>
           <h2 className="h-display mt-3 max-w-2xl text-4xl text-navy-900 sm:text-5xl">From first visit to handover, one team</h2>
         </Reveal>
         <Reveal as="ol" stagger className="process-steps relative mt-12 grid gap-8 md:grid-cols-4 md:gap-0">
