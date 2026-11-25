@@ -23,6 +23,7 @@ export const metadata: Metadata = {
     type: "website",
     siteName: site.name,
     locale: "en_PK",
+    url: site.url,
     title: "Zetta Tech | ZKTeco attendance, access control and CCTV in Karachi",
     description: site.description,
   },

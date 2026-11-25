@@ -1,7 +1,20 @@
 export const site = {
   name: "Zetta Tech",
   tagline: "Complete Security & Networking Solutions",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://zettatech.example",
+  /**
+   * Canonical origin. Canonical tags, og:url, the sitemap and robots.txt all build
+   * from this, so a wrong value here quietly tells search engines that the real
+   * pages are copies of a domain nobody owns.
+   *
+   * Precedence: an explicit NEXT_PUBLIC_SITE_URL wins; otherwise Vercel's own
+   * production URL is used, so a deploy without the variable set is still correct;
+   * the `.example` placeholder is the last resort for local builds only.
+   */
+  url:
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    (process.env.VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+      : "https://zettatech.example"),
   whatsapp: process.env.NEXT_PUBLIC_WHATSAPP ?? "923070026015",
   phone: process.env.NEXT_PUBLIC_PHONE ?? "+92 307 0026015",
   email: process.env.NEXT_PUBLIC_EMAIL ?? "zettatech.sales@gmail.com",
