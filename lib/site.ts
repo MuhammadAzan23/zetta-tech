@@ -1,3 +1,13 @@
+/** A configured origin, or null when it is missing or still a placeholder. */
+function configuredOrigin() {
+  const raw = (process.env.NEXT_PUBLIC_SITE_URL ?? "").trim().replace(/\/$/, "");
+  if (!raw) return null;
+  // The template value in .env.example must never reach production: it would make
+  // every canonical tag point at a domain nobody owns.
+  if (/\.example$/i.test(new URL(/^https?:\/\//i.test(raw) ? raw : `https://${raw}`).hostname)) return null;
+  return raw;
+}
+
 export const site = {
   name: "Zetta Tech",
   tagline: "Complete Security & Networking Solutions",
@@ -6,12 +16,12 @@ export const site = {
    * from this, so a wrong value here quietly tells search engines that the real
    * pages are copies of a domain nobody owns.
    *
-   * Precedence: an explicit NEXT_PUBLIC_SITE_URL wins; otherwise Vercel's own
-   * production URL is used, so a deploy without the variable set is still correct;
-   * the `.example` placeholder is the last resort for local builds only.
+   * Precedence: a real NEXT_PUBLIC_SITE_URL; otherwise Vercel's own production URL,
+   * so a deploy whose variable is unset or still the .example placeholder is still
+   * correct; the placeholder is the last resort for local builds only.
    */
   url:
-    process.env.NEXT_PUBLIC_SITE_URL ??
+    configuredOrigin() ??
     (process.env.VERCEL_PROJECT_PRODUCTION_URL
       ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
       : "https://zettatech.example"),
